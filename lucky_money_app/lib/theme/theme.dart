@@ -28,6 +28,7 @@ final ThemeData casinoTheme = ThemeData(
 
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFFB11226),
+    foregroundColor: Colors.white,
 
     elevation: 0,
   ),
