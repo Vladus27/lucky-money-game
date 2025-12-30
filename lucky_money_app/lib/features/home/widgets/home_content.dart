@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucky_money_app/common/constant/home_string.dart';
+import 'package:lucky_money_app/common/constant/home_strings.dart';
 
 import 'package:lucky_money_app/common/constant/image_constants.dart';
 
