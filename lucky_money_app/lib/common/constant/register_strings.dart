@@ -1,6 +1,5 @@
-const String registerAppBarTitle = 'Реєстрація';
-const String registerLabel = 'Створіть аккаунт, щоб почати гру з WBT';
-const String registerUsername = 'Username';
-const String registerPassword = 'Password';
-const String registerWallet = 'Wallet address';
-const String registerQuestion = 'Вже маєш аккаунт?';
+const String appBarTitle = 'Реєстрація';
+const String label = 'Створіть аккаунт, щоб почати гру з WBT';
+const String buttonLabel = 'Зареєструватися';
+const String question = 'Вже маєш аккаунт?';
+const String questionButton = 'Увійти';
