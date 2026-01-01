@@ -54,15 +54,15 @@ class _AuthFormState extends State<AuthForm> {
             usernameController: _usernameController,
             usernameLabel: widget.usernameLabel,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 8),
           PasswordInput(
             passwordController: _passwordController,
             passwordLabel: widget.passwordLabel,
             isPasswordVisible: _isPasswordVisible,
             tooglePasswordVisible: _tooglePasswordVisible,
           ),
-          const SizedBox(height: 24),
 
+          const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

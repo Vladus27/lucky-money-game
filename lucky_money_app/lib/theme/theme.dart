@@ -38,7 +38,7 @@ final ThemeData casinoTheme = ThemeData(
       backgroundColor: const Color(0xFFF5C542),
       foregroundColor: const Color(0xFF1C1C1C),
 
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       textStyle: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w600),
     ),
   ),
@@ -51,7 +51,7 @@ final ThemeData casinoTheme = ThemeData(
 
       backgroundColor: const Color.fromARGB(255, 150, 15, 33),
       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       textStyle: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w600),
     ),
   ),
