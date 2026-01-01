@@ -38,7 +38,7 @@ final ThemeData casinoTheme = ThemeData(
       foregroundColor: const Color(0xFF1C1C1C),
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      textStyle: const TextStyle(fontWeight: FontWeight.w600),
+      textStyle: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w600),
     ),
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
@@ -51,12 +51,29 @@ final ThemeData casinoTheme = ThemeData(
       backgroundColor: const Color.fromARGB(255, 150, 15, 33),
       foregroundColor: const Color.fromARGB(255, 255, 255, 255),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      textStyle: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w600),
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      textStyle: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w400),
     ),
   ),
 
   textTheme: GoogleFonts.montserratAlternatesTextTheme().copyWith(
     titleLarge: GoogleFonts.montserratAlternates(fontWeight: FontWeight.w700),
+    labelLarge: GoogleFonts.montserratAlternates(
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+    ),
+    labelMedium: GoogleFonts.montserratAlternates(
+      fontWeight: FontWeight.w700,
+      color: const Color(0xFFF5C542),
+    ),
+    labelSmall: GoogleFonts.montserratAlternates(
+      // fontWeight: FontWeight.w700,
+      color: Colors.white,
+    ),
   ),
 
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
