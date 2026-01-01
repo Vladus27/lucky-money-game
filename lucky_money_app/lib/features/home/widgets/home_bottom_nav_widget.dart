@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/providers/bottom_nav_index_provider.dart';
 
-class BottomNavBarWidget extends ConsumerWidget {
-  const BottomNavBarWidget({super.key, required this.setIndexPage});
+class HomeBottomNavWidget extends ConsumerWidget {
+  const HomeBottomNavWidget({super.key, required this.setIndexPage});
   final void Function(int i) setIndexPage;
 
   @override

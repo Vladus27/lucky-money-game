@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/features/history/view/history_screen.dart';
 
-import 'package:lucky_money_app/features/home/widgets/app_bar_widget.dart';
-import 'package:lucky_money_app/features/home/widgets/bottom_nav_bar_widget.dart';
-import 'package:lucky_money_app/features/home/widgets/fab_widget.dart';
+import 'package:lucky_money_app/features/home/widgets/home_header.dart';
+import 'package:lucky_money_app/features/home/widgets/home_bottom_nav_widget.dart';
+import 'package:lucky_money_app/features/home/widgets/home_fab_widget.dart';
 import 'package:lucky_money_app/features/home/widgets/home_content.dart';
 import 'package:lucky_money_app/providers/bottom_nav_index_provider.dart';
 
@@ -43,9 +43,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     return Scaffold(
-      floatingActionButton: const FabWidget(),
+      resizeToAvoidBottomInset: false,
+      appBar: const HomeHeader(),
+      floatingActionButton: const HomeFabWidget(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      appBar: const AppBarWidget(),
 
       body: PageView(
         controller: _pageController,
@@ -54,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: const [HistoryScreen(), HomeContent()],
       ),
 
-      bottomNavigationBar: BottomNavBarWidget(setIndexPage: setPage),
+      bottomNavigationBar: HomeBottomNavWidget(setIndexPage: setPage),
     );
   }
 }
