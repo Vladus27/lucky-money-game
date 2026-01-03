@@ -8,7 +8,7 @@ class HomeHeader extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLogined = 1 == 1;
+    bool isLogined = 1 == 2;
     Widget userAction = isLogined
         ? const HomeHeaderLogged()
         : const HomeHeaderGuest();
