@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_address_input.dart';
 
 class WalletFirstStep extends StatelessWidget {
-  const WalletFirstStep({super.key});
+  const WalletFirstStep({
+    super.key,
+    required this.stepLabel,
+    required this.stepDescription,
+  });
+  final String stepLabel;
+  final String stepDescription;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +18,7 @@ class WalletFirstStep extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Крок 1. З'єднання",
+          stepLabel,
           style: theme.textTheme.labelLarge!.copyWith(
             color: theme.colorScheme.surface.withValues(alpha: .8),
           ),
@@ -20,7 +26,7 @@ class WalletFirstStep extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Введи адресу гаманця, з якого будеш здійснювати поповнення',
+            stepDescription,
             style: theme.textTheme.bodyMedium!.copyWith(
               color: theme.colorScheme.onPrimary.withValues(alpha: .9),
               fontWeight: FontWeight.w300,

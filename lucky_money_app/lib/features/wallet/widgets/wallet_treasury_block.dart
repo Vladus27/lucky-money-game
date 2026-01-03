@@ -7,7 +7,6 @@ class WalletTreasuryBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      width: double.infinity,
       decoration: BoxDecoration(
         color: theme.colorScheme.secondary,
         borderRadius: BorderRadius.circular(12),

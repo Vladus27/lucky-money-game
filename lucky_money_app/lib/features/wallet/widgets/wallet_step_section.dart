@@ -12,19 +12,23 @@ class WalletStepSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const WalletFirstStep(),
+        const WalletFirstStep(
+          stepLabel: "Крок 1. З'єднання",
+          stepDescription:
+              "Введи адресу гаманця, з якого будеш здійснювати поповнення",
+        ),
         const SizedBox(height: 24),
         WalletStepCard(
           stepNum: '1',
-          stepLabel: 'stepLabel',
-          stepDescription: 'stepDescription',
+          stepLabel: 'Крок 2. Отримання токенів',
+          stepDescription: 'Натисни кнопку нижче, щоб відкрити official faucet',
           stepContent: WalletFaucetBlock(openLink: () {}),
         ),
         const SizedBox(height: 24),
         const WalletStepCard(
           stepNum: '2',
-          stepLabel: 'stepLabel',
-          stepDescription: 'stepDescription',
+          stepLabel: 'Крок 3. Поповнити баланс',
+          stepDescription: 'Надішли отриманні токени за адресою нижче',
           stepContent: WalletTreasuryBlock(),
         ),
         const SizedBox(height: 12),

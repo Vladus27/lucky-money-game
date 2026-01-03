@@ -17,6 +17,7 @@ class WalletStepCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           stepLabel,
@@ -36,34 +37,40 @@ class WalletStepCard extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Container(
-                      height: 24,
-                      width: 24,
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: Center(
-                        child: Text(stepNum, style: theme.textTheme.labelLarge),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        stepDescription,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          color: theme.colorScheme.onPrimary.withValues(
-                            alpha: .9,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        height: 24,
+                        width: 24,
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primary,
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        child: Center(
+                          child: Text(
+                            stepNum,
+                            style: theme.textTheme.labelLarge,
                           ),
-                          fontWeight: FontWeight.w300,
                         ),
                       ),
-                    ),
-                    stepContent,
-                  ],
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          stepDescription,
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            color: theme.colorScheme.onPrimary.withValues(
+                              alpha: .9,
+                            ),
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                SizedBox(width: double.infinity, child: stepContent),
               ],
             ),
           ),

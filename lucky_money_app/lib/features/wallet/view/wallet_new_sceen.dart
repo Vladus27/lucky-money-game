@@ -21,13 +21,13 @@ class WalletNewScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 WalletBalanceCard(
-                  cardLabel: '',
-                  cardBalance: '',
+                  cardLabel: 'БАЛАНС (WBT)',
+                  cardBalance: '1500.00',
                   colorHead: colorTheme.primary,
                 ),
                 WalletBalanceCard(
-                  cardLabel: '',
-                  cardBalance: '',
+                  cardLabel: 'У ГРІ',
+                  cardBalance: 'comming soon...',
                   colorHead: colorTheme.secondary,
                 ),
               ],

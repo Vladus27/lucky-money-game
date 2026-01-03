@@ -14,6 +14,7 @@ class WalletBalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
@@ -54,14 +55,21 @@ class WalletBalanceCard extends StatelessWidget {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: Text(cardLabel, style: theme.textTheme.labelLarge),
+                      child: Text(
+                        cardLabel,
+                        style: theme.textTheme.labelLarge!.copyWith(
+                          color: colorHead == theme.colorScheme.secondary
+                              ? theme.colorScheme.onSurface
+                              : theme.colorScheme.surface,
+                        ),
+                      ),
                     ),
                   ),
                 ),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('$cardBalance WBT'),
+                    child: Text(cardBalance),
                   ),
                 ),
               ],

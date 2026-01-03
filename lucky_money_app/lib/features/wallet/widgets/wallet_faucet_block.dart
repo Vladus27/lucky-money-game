@@ -6,13 +6,10 @@ class WalletFaucetBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: openLink,
-        label: const Text('Open Faucet'),
-        icon: const Icon(Icons.link),
-      ),
+    return OutlinedButton.icon(
+      onPressed: openLink,
+      label: const Text('Open Faucet'),
+      icon: const Icon(Icons.link),
     );
   }
 }
