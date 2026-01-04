@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/models/history_model.dart';
 import 'package:lucky_money_app/features/history/widgets/history_empty_state.dart';
 import 'package:lucky_money_app/features/history/widgets/history_tile.dart';
+import 'package:lucky_money_app/features/history/widgets/history_unauthenticated_state.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bool isAuthenticated = 1 == 3;
     final history = [
       HistoryItem(
         type: HistoryType.deposit,
@@ -26,6 +28,17 @@ class HistoryScreen extends StatelessWidget {
         coefficient: 2.5,
       ),
     ];
+
+    if (!isAuthenticated) {
+      return HistoryUnauthenticatedState(
+        onLoginPressed: () {
+          Navigator.pushNamed(context, '/auth-login');
+        },
+        onRegisterPressed: () {
+          Navigator.pushNamed(context, '/auth-register');
+        },
+      );
+    }
 
     if (history.isNotEmpty) {
       return HistoryEmptyState(
