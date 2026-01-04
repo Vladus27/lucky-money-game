@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/constant/wallet_strings.dart';
 
 class WalletAddressInput extends StatefulWidget {
-  const WalletAddressInput({super.key});
+  const WalletAddressInput({
+    super.key,
+    required this.userAddressInputLabel,
+    required this.userAddressInputHint,
+  });
+  final String userAddressInputLabel;
+  final String userAddressInputHint;
 
   @override
   State<WalletAddressInput> createState() => _WalletAddressInputState();
@@ -23,8 +30,8 @@ class _WalletAddressInputState extends State<WalletAddressInput> {
       controller: _walletController,
       style: TextStyle(color: theme.colorScheme.onPrimary),
       decoration: InputDecoration(
-        hintText: 'oxdsf234...',
-        labelText: 'Адреса гаманця',
+        hintText: userAddressInputHint,
+        labelText: userAddressInputLabel,
 
         suffixIcon: IconButton(
           icon: const Icon(Icons.playlist_add_outlined),

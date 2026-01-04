@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class WalletTreasuryBlock extends StatelessWidget {
-  const WalletTreasuryBlock({super.key});
+  const WalletTreasuryBlock({
+    super.key,
+    required this.treasuryLabel,
+    required this.treasuryAddress,
+  });
+  final String treasuryLabel;
+  final String treasuryAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +25,9 @@ class WalletTreasuryBlock extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(treasuryLabel, style: theme.textTheme.bodySmall),
                 Text(
-                  'Treasury Address (Sepolia)',
-                  style: theme.textTheme.bodySmall,
-                ),
-                Text(
-                  '0x742d...44e',
+                  treasuryAddress,
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

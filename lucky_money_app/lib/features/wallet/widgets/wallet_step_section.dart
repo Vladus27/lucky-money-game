@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
 
 import 'package:lucky_money_app/features/wallet/widgets/wallet_card_step.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_faucet_block.dart';
@@ -10,26 +11,36 @@ class WalletStepSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final walletStep1 = WalletSectionCopy.step1();
+    final walletStep2 = WalletSectionCopy.step2();
+    final walletStep3 = WalletSectionCopy.step3();
     return Column(
       children: [
-        const WalletFirstStep(
-          stepLabel: "Крок 1. З'єднання",
-          stepDescription:
-              "Введи адресу гаманця, з якого будеш здійснювати поповнення",
+        WalletFirstStep(
+          stepLabel: walletStep1.stepLabel!,
+          stepDescription: walletStep1.stepDescription!,
+          userAddressInputLabel: walletStep1.userAddressInputLabel!,
+          userAddressInputHint: walletStep1.userAddressInputHint!,
         ),
         const SizedBox(height: 24),
         WalletStepCard(
-          stepNum: '1',
-          stepLabel: 'Крок 2. Отримання токенів',
-          stepDescription: 'Натисни кнопку нижче, щоб відкрити official faucet',
-          stepContent: WalletFaucetBlock(openLink: () {}),
+          stepNum: walletStep2.stepNum!,
+          stepLabel: walletStep2.stepLabel!,
+          stepDescription: walletStep2.stepDescription!,
+          stepContent: WalletFaucetBlock(
+            faucetLabel: walletStep2.faucetLabel!,
+            openLink: () {},
+          ),
         ),
         const SizedBox(height: 24),
-        const WalletStepCard(
-          stepNum: '2',
-          stepLabel: 'Крок 3. Поповнити баланс',
-          stepDescription: 'Надішли отриманні токени за адресою нижче',
-          stepContent: WalletTreasuryBlock(),
+        WalletStepCard(
+          stepNum: walletStep3.stepNum!,
+          stepLabel: walletStep3.stepLabel!,
+          stepDescription: walletStep3.stepDescription!,
+          stepContent: WalletTreasuryBlock(
+            treasuryLabel: walletStep3.treasuryLabel!,
+            treasuryAddress: walletStep3.treasuryAddress!,
+          ),
         ),
         const SizedBox(height: 12),
       ],

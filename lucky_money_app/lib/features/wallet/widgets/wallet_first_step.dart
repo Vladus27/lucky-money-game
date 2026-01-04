@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_address_input.dart';
 
 class WalletFirstStep extends StatelessWidget {
@@ -6,19 +7,24 @@ class WalletFirstStep extends StatelessWidget {
     super.key,
     required this.stepLabel,
     required this.stepDescription,
+    required this.userAddressInputLabel,
+    required this.userAddressInputHint,
   });
   final String stepLabel;
   final String stepDescription;
+  final String userAddressInputLabel;
+  final String userAddressInputHint;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final wallet = WalletSectionCopy.step1();
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          stepLabel,
+          wallet.stepLabel!,
           style: theme.textTheme.labelLarge!.copyWith(
             color: theme.colorScheme.surface.withValues(alpha: .8),
           ),
@@ -33,7 +39,10 @@ class WalletFirstStep extends StatelessWidget {
             ),
           ),
         ),
-        const WalletAddressInput(),
+        WalletAddressInput(
+          userAddressInputHint: userAddressInputHint,
+          userAddressInputLabel: userAddressInputLabel,
+        ),
       ],
     );
   }

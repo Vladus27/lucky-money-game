@@ -14,6 +14,7 @@ class WalletBalanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final walletCopy = WalletSectionCopy.of(wallet);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WalletFaucetBlock extends StatelessWidget {
-  const WalletFaucetBlock({super.key, required this.openLink});
+  const WalletFaucetBlock({
+    super.key,
+    required this.faucetLabel,
+    required this.openLink,
+  });
+  final String faucetLabel;
   final void Function() openLink;
 
   @override

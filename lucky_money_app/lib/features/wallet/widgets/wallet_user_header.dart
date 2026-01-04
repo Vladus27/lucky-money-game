@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/constant/image_constants.dart';
+import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
 
 class WalletUserHeader extends StatelessWidget {
   const WalletUserHeader({super.key});
@@ -7,6 +8,7 @@ class WalletUserHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final wallet = WalletSectionCopy.start();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
@@ -19,9 +21,12 @@ class WalletUserHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Привіт,', style: TextStyle(color: Colors.white)),
               Text(
-                '@VladGamler',
+                wallet.helloLabel!,
+                style: const TextStyle(color: Colors.white),
+              ),
+              Text(
+                wallet.username!,
                 style: theme.textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.w700,
                   color: theme.colorScheme.surface,
