@@ -4,7 +4,7 @@ import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/view/authentication_screen.dart';
 import 'package:lucky_money_app/features/history/view/history_screen.dart';
 import 'package:lucky_money_app/features/home/view/home_screen.dart';
-import 'package:lucky_money_app/features/wallet/view/wallet_new_sceen.dart';
+import 'package:lucky_money_app/features/wallet/view/wallet_sceen.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
   '/': (ctx) => const HomeScreen(),

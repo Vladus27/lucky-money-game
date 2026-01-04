@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
 
 class WalletBalanceCard extends StatelessWidget {
   const WalletBalanceCard({
     super.key,
-    required this.cardLabel,
-    required this.cardBalance,
+    required this.wallet,
     required this.colorHead,
   });
-  final String cardLabel;
-  final String cardBalance;
+  final WalletSection wallet;
   final Color colorHead;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final walletCopy = WalletSectionCopy.of(wallet);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Row(
@@ -56,7 +55,7 @@ class WalletBalanceCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
-                        cardLabel,
+                        walletCopy.balancelabel!,
                         style: theme.textTheme.labelLarge!.copyWith(
                           color: colorHead == theme.colorScheme.secondary
                               ? theme.colorScheme.onSurface
@@ -69,7 +68,7 @@ class WalletBalanceCard extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(cardBalance),
+                    child: Text(walletCopy.balance!),
                   ),
                 ),
               ],

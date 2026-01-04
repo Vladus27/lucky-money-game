@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_balance_card.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_header.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_hero_section.dart';
@@ -21,13 +22,11 @@ class WalletScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 WalletBalanceCard(
-                  cardLabel: 'БАЛАНС (WBT)',
-                  cardBalance: '1500.00',
+                  wallet: WalletSection.totalBalance,
                   colorHead: colorTheme.primary,
                 ),
                 WalletBalanceCard(
-                  cardLabel: 'У ГРІ',
-                  cardBalance: 'comming soon...',
+                  wallet: WalletSection.inGameBalance,
                   colorHead: colorTheme.secondary,
                 ),
               ],
