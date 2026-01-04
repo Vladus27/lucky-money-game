@@ -4,8 +4,8 @@ import 'package:lucky_money_app/features/wallet/widgets/wallet_balance_card.dart
 import 'package:lucky_money_app/features/wallet/widgets/wallet_header.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_hero_section.dart';
 
-class WalletNewScreen extends StatelessWidget {
-  const WalletNewScreen({super.key});
+class WalletScreen extends StatelessWidget {
+  const WalletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
