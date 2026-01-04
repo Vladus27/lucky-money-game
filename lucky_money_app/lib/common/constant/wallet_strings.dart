@@ -3,7 +3,7 @@ const String walletUsername = "@VladGambler";
 
 const String stpeLabel1 = "Крок 1. З'єднання";
 const String stepDescription1 =
-    "Введи адресу гаманця, з якого будеш здійснювати поповнення";
+    "Введи адресу гаманця, з якого будеш здійснювати поповнення, щоб відслідкувати нарахування";
 const String userAddressInputLabel = "Адреса гаманця";
 const String userAddressInputHint = "oxdsf234...";
 
