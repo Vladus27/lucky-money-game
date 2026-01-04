@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:lucky_money_app/common/models/authentication_model.dart';
+import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/auth_card.dart';
 import 'package:lucky_money_app/features/authentication/widgets/auth_footer.dart';
 import 'package:lucky_money_app/features/authentication/widgets/auth_header.dart';

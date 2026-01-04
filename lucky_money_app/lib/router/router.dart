@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:lucky_money_app/common/models/authentication_model.dart';
+import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/view/authentication_screen.dart';
 import 'package:lucky_money_app/features/history/view/history_screen.dart';
 import 'package:lucky_money_app/features/home/view/home_screen.dart';
