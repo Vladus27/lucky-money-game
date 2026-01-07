@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/models/wallet_section_copy.dart';
+import 'package:lucky_money_app/common/widgets/box_shadow.dart';
 
 class WalletBalanceCard extends StatelessWidget {
   const WalletBalanceCard({
@@ -26,20 +27,7 @@ class WalletBalanceCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.5),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.5),
-                  spreadRadius: 0,
-                  blurRadius: .8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: containerShadow,
             ),
             child: Column(
               children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/models/authentication_copy.dart';
+import 'package:lucky_money_app/common/widgets/box_shadow.dart';
 import 'package:lucky_money_app/features/authentication/widgets/auth_form.dart';
 
 class AuthCard extends StatelessWidget {
@@ -22,20 +23,7 @@ class AuthCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.5),
-            spreadRadius: 0,
-            blurRadius: 4,
-            offset: const Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.5),
-            spreadRadius: 0,
-            blurRadius: .8,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: containerShadow,
       ),
       child: Padding(
         padding: const EdgeInsets.all(14.0),
