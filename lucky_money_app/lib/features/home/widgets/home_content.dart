@@ -52,7 +52,11 @@ class HomeContent extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: isAuthenticated
+                                ? () {
+                                    Navigator.pushNamed(context, '/my-gane');
+                                  }
+                                : null,
                             child: const Text(homeLabelBtn),
                           ),
                         ),
