@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/models/game_model.dart';
 
-class GameGrid extends StatelessWidget {
+class GameGrid extends StatefulWidget {
   const GameGrid({super.key});
+
+  @override
+  State<GameGrid> createState() => _GameGridState();
+}
+
+class _GameGridState extends State<GameGrid> {
+  final status = GameStatus.playing;
+
+  void _handleCellClick({required int idx}) {
+    print('container taped by ${idx + 1} position');
+    if (status != GameStatus.playing) return;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +41,21 @@ class GameGrid extends StatelessWidget {
           childAspectRatio: 1, //  квадрат
         ),
         itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: index == 6
-                  ? theme.colorScheme.secondary
-                  : theme.colorScheme.surface.withValues(alpha: .1),
-            ),
-            alignment: Alignment.center,
+          return GestureDetector(
+            onTap: () => _handleCellClick(idx: index),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: index == 6
+                    ? theme.colorScheme.secondary
+                    : theme.colorScheme.surface.withValues(alpha: .1),
+              ),
+              alignment: Alignment.center,
 
-            child: Text(
-              '${index + 1}',
-              style: const TextStyle(color: Colors.white, fontSize: 20),
+              child: Text(
+                '${index + 1}',
+                style: const TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
           );
         },

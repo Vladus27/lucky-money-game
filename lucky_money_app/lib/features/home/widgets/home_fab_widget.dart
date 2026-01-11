@@ -7,7 +7,7 @@ class HomeFabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        Navigator.pushNamed(context, '/wallet');
+        Navigator.pushNamed(context, '/game');
       },
       child: const Icon(Icons.wallet_rounded),
     );

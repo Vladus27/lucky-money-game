@@ -30,12 +30,10 @@ class _GameSettingInputsState extends State<GameSettingInputs> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,s
           children: bets.map((bet) {
             return Expanded(
               child: Padding(
@@ -51,38 +49,6 @@ class _GameSettingInputsState extends State<GameSettingInputs> {
         ),
         const SizedBox(height: 24),
         GameBetInput(betController: _betController),
-
-        // TextFormField(
-        //   // maxLength: 64,
-        //   keyboardType: TextInputType.number,
-
-        //   decoration: InputDecoration(
-        //     icon: Icon(
-        //       Icons.casino_outlined,
-        //       color: theme.colorScheme.primary,
-        //       size: 42,
-        //     ),
-        //     hintText: 'Введи свою ставку',
-        //     labelText: 'Ставка',
-
-        //     filled: true,
-        //     fillColor: Theme.of(context).colorScheme.surfaceContainer,
-
-        //     enabledBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(12),
-        //       borderSide: BorderSide(
-        //         color: Theme.of(context).colorScheme.onPrimary,
-        //       ),
-        //     ),
-
-        //     focusedBorder: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(12),
-        //       borderSide: BorderSide(
-        //         color: Theme.of(context).colorScheme.primary,
-        //       ),
-        //     ),
-        //   ),
-        // ),
         Slider(
           min: 1,
           max: 8,
@@ -98,17 +64,7 @@ class _GameSettingInputsState extends State<GameSettingInputs> {
         Text('Кількість мін: ${_minCount.toStringAsFixed(0)}'),
 
         const SizedBox(height: 24),
-        const SizedBox(
-          width: double.infinity,
-          child: GameButtonStart(),
-
-          //  OutlinedButton(
-          //   onPressed: () {
-          //     Navigator.pop(context);
-          //   },
-          //   child: const Text('ПОЧАТИ ГРУ'),
-          // ),
-        ),
+        const SizedBox(width: double.infinity, child: GameButtonStart()),
         Text(
           'Перший множник: x1.47',
           style: Theme.of(context).textTheme.bodySmall,
