@@ -3,7 +3,7 @@ import 'package:lucky_money_app/common/models/history_model.dart';
 import 'package:lucky_money_app/features/history/widgets/history_empty_state.dart';
 import 'package:lucky_money_app/features/history/widgets/history_tile.dart';
 import 'package:lucky_money_app/features/history/widgets/history_unauthenticated_state.dart';
-import 'package:lucky_money_app/repo/secure_storage_service.dart';
+import 'package:lucky_money_app/services/secure_storage_service.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});

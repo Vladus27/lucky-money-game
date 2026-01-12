@@ -6,7 +6,7 @@ class GameBetNotifier extends Notifier<int> {
 
   void setBet(int bet) {
     state = bet;
-    print('betNotifier state is now $state');
+    // print('betNotifier state is now $state');
   }
 
   bool isBetSelected(int bet) {

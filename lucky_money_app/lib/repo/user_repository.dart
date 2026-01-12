@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:lucky_money_app/common/models/api_error.dart';
 import 'package:lucky_money_app/common/models/environment.dart';
 import 'package:lucky_money_app/common/models/user.dart';
-import 'package:lucky_money_app/repo/secure_storage_service.dart';
+import 'package:lucky_money_app/services/secure_storage_service.dart';
 
 class UserRepository {
   final String _basicUrl = Environment.apiUrl;

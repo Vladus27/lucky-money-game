@@ -12,7 +12,7 @@ class _GameGridState extends State<GameGrid> {
   final status = GameStatus.playing;
 
   void _handleCellClick({required int idx}) {
-    print('container taped by ${idx + 1} position');
+    // print('container taped by ${idx + 1} position');
     if (status != GameStatus.playing) return;
   }
 

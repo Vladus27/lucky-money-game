@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucky_money_app/repo/secure_storage_service.dart';
+import 'package:lucky_money_app/services/secure_storage_service.dart';
 
 class HomeFabWidget extends StatelessWidget {
   const HomeFabWidget({super.key});
