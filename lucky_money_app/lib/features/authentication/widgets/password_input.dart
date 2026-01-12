@@ -25,7 +25,7 @@ class PasswordInput extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'а пароль вписати?';
         }
-        final regex = RegExp(r'^[a-zA-Z0-9]{8,128}$');
+        final regex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,128}$');
         if (!regex.hasMatch(value)) {
           return 'недотримані вимоги';
         }
