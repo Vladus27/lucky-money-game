@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_input.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_requirements.dart';
 import 'package:lucky_money_app/features/authentication/widgets/username_input.dart';
+import 'package:lucky_money_app/providers/auth_provider.dart';
 import 'package:lucky_money_app/repo/user_repository.dart';
 
-class AuthForm extends StatefulWidget {
+class AuthForm extends ConsumerStatefulWidget {
   const AuthForm({
     super.key,
     required this.mode,
@@ -19,10 +21,10 @@ class AuthForm extends StatefulWidget {
   final String buttonLabel;
 
   @override
-  State<AuthForm> createState() => _AuthFormState();
+  ConsumerState<AuthForm> createState() => _AuthFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _AuthFormState extends ConsumerState<AuthForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -125,6 +127,7 @@ class _AuthFormState extends State<AuthForm> {
         );
         return;
       }
+      ref.invalidate(userProvider);
       Navigator.pop(context);
     }
     debugPrint('Username: $username, password: $password');
