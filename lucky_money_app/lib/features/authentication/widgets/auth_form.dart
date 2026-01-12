@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_input.dart';
 import 'package:lucky_money_app/features/authentication/widgets/username_input.dart';
+import 'package:lucky_money_app/repo/user_repository.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm({
@@ -25,7 +26,9 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  String? error;
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   void _tooglePasswordVisible() {
     setState(() {
@@ -66,8 +69,10 @@ class _AuthFormState extends State<AuthForm> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _submit,
-              child: Text(widget.buttonLabel),
+              onPressed: _isLoading ? null : _submit,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : Text(widget.buttonLabel),
             ),
           ),
         ],
@@ -75,13 +80,38 @@ class _AuthFormState extends State<AuthForm> {
     );
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    final user = UserRepository();
 
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    // тут буде виклик use case / auth service
+    setState(() {
+      _isLoading = true;
+    });
+    if (widget.mode == AuthMode.login) {
+      error = await user.loginUser(username: username, password: password);
+    } else {
+      error = await user.registerUser(username: username, password: password);
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (mounted) {
+      if (error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error!),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+        return;
+      }
+      Navigator.pop(context);
+    }
     debugPrint('Username: $username, password: $password');
   }
 }

@@ -46,7 +46,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24.0),
               child: AuthCard(
-                mode: widget.initialMode,
+                mode: _mode,
                 usernameLabel: copy.username,
                 passwordLabel: copy.password,
                 buttonLabel: copy.buttonLabel,

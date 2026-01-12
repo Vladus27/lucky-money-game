@@ -4,50 +4,61 @@ import 'package:lucky_money_app/repo/secure_storage_service.dart';
 
 class UserRepository {
   final String _basicUrl = Environment.apiUrl;
-  final Dio dio = Dio();
+  final Dio _dio = Dio();
   final storage = SecureStorageService();
 
-  Future<void> registerUser({
+  Future<String?> registerUser({
     required String username,
     required String password,
   }) async {
     try {
-      final response = await dio.post(
+      final response = await _dio.post(
         '$_basicUrl/api/auth/register',
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: {'userName': username, 'password': password},
       );
 
+      if (response.data['isOk'] == false) {
+        return 'Невірний формат логіну або паролю';
+      }
+
       final accessToken = response.data['value']['token'];
       if (accessToken != null) {
         await storage.saveToken(accessToken);
       }
+      return null;
     } on DioException catch (e) {
-      // e.response?.data -> відповідає даним від сервера
-      // e.message -> локальне повідомлення про помилку
-      throw e.response?.data ?? e.message;
+      if (e.response?.statusCode == 400) {
+        return 'Недотримався принципів потужного паролю';
+      }
+      return 'Помилка сервера (${e.response?.statusCode})';
     }
   }
 
-  Future<void> loginUser({
+  Future<String?> loginUser({
     required String username,
     required String password,
   }) async {
     try {
-      final response = await dio.post(
+      final response = await _dio.post(
         '$_basicUrl/api/auth/login',
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: {'userName': username, 'password': password},
       );
+      if (response.data['isOk'] == false) {
+        return 'Невірний логін або пароль';
+      }
 
       final accessToken = response.data['value']['token'];
       if (accessToken != null) {
         await storage.saveToken(accessToken);
       }
+      return null;
     } on DioException catch (e) {
-      // e.response?.data -> відповідає даним від сервера
-      // e.message -> локальне повідомлення про помилку
-      throw e.response?.data ?? e.message;
+      if (e.response?.statusCode == 404) {
+        return 'Невірний логін або пароль';
+      }
+      return 'Помилка сервера (${e.response?.statusCode})';
     }
   }
 }
