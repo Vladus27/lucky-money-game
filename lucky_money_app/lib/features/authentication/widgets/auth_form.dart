@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_input.dart';
+import 'package:lucky_money_app/features/authentication/widgets/password_requirements.dart';
 import 'package:lucky_money_app/features/authentication/widgets/username_input.dart';
 import 'package:lucky_money_app/repo/user_repository.dart';
 
@@ -29,6 +30,17 @@ class _AuthFormState extends State<AuthForm> {
   String? error;
   bool _isPasswordVisible = false;
   bool _isLoading = false;
+  String inputPassword = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordController.addListener(() {
+      setState(() {
+        inputPassword = _passwordController.text;
+      });
+    });
+  }
 
   void _tooglePasswordVisible() {
     setState(() {
@@ -66,6 +78,9 @@ class _AuthFormState extends State<AuthForm> {
           ),
 
           const SizedBox(height: 8),
+          widget.mode == AuthMode.register
+              ? PasswordRequirements(password: inputPassword)
+              : const SizedBox.shrink(),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

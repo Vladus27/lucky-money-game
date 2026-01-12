@@ -17,7 +17,7 @@ class PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextFormField(
-      maxLength: 64,
+      maxLength: 128,
       keyboardType: TextInputType.text,
       controller: passwordController,
       obscureText: !isPasswordVisible,
@@ -25,9 +25,9 @@ class PasswordInput extends StatelessWidget {
         if (value == null || value.isEmpty) {
           return 'а пароль вписати?';
         }
-        final regex = RegExp(r'^\S{8,64}$');
+        final regex = RegExp(r'^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,128}$');
         if (!regex.hasMatch(value)) {
-          return 'мінімум 8 симовлів без пробілів';
+          return 'недотримані вимоги';
         }
 
         return null;
