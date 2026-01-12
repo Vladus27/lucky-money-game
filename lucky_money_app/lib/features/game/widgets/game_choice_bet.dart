@@ -45,7 +45,6 @@ class GameChoiceBet extends ConsumerWidget {
       onSelected: isAvailable
           ? (selected) {
               if (selected) {
-                // Оновлюємо контролер і провайдери
                 betController.text = bet.toString();
                 betNotifier.setBet(bet);
                 ref.read(betValidatorProvider.notifier).updateValidation(bet);

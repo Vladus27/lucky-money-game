@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/providers/bet_validation_result_provider.dart';
 import 'package:lucky_money_app/providers/game_bet_provider.dart';
-// import 'package:lucky_money_app/providers/game_input_bet_provider.dart';
 
 class GameBetInput extends ConsumerStatefulWidget {
   const GameBetInput({super.key, required this.betController});
@@ -12,33 +11,6 @@ class GameBetInput extends ConsumerStatefulWidget {
   @override
   ConsumerState<GameBetInput> createState() => _GameBetInputState();
 }
-// final TextEditingController _betController = TextEditingController();
-
-// final balance = 70;
-
-// final minBet = 5;
-
-// String? _validateBet(String? value) {
-//   if (value == null || value.isEmpty) {
-//     return 'Введи суму ставки';
-//   }
-
-//   final bet = int.tryParse(value);
-
-//   if (bet == null) {
-//     return 'Ставка має бути числом';
-//   }
-
-//   if (bet < minBet) {
-//     return 'Мінімальна ставка — ${minBet}';
-//   }
-
-//   if (bet > balance) {
-//     return 'Недостатньо коштів';
-//   }
-
-//   return null; // ✅ валідно
-// }
 
 class _GameBetInputState extends ConsumerState<GameBetInput> {
   late final TextEditingController _controller;
@@ -59,15 +31,8 @@ class _GameBetInputState extends ConsumerState<GameBetInput> {
   }
 
   @override
-  void dispose() {
-    // Не видаляємо контролер, оскільки він належить батьківському віджету
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // final betController = ref.watch(betInputControllerProvider);
     final validation = ref.watch(betValidatorProvider);
 
     return TextFormField(
