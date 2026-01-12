@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:lucky_money_app/common/models/api_error.dart';
 import 'package:lucky_money_app/common/models/environment.dart';
+import 'package:lucky_money_app/common/models/user.dart';
 import 'package:lucky_money_app/repo/secure_storage_service.dart';
 
 class UserRepository {
@@ -59,6 +61,73 @@ class UserRepository {
         return 'Невірний логін або пароль';
       }
       return 'Помилка сервера (${e.response?.statusCode})';
+    }
+  }
+
+  Future<Result<User>> userData() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+      }
+      final response = await _dio.get(
+        "$_basicUrl/api/auth/me",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data["isOk"] == true) {
+        final responseData = response.data['value'] as Map<String, dynamic>;
+        final user = User.fromJson(responseData);
+        return Result.success(user);
+      } else {
+        return Result.failure(
+          ApiError(
+            message: 'якась Помилка сервера',
+            statusCode: response.statusCode,
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (_) {
+      return Result.failure(ApiError(message: 'Невідома помилка'));
+    }
+  }
+
+  Future<Result<String>> getBalance() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(ApiError(message: 'не вдалось отримати баланс'));
+      }
+      final response = await _dio.get(
+        "$_basicUrl/api/auth/balance",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data["isOk"] == true) {
+        final responseData = response.data['value'];
+        return Result.success(responseData.toString());
+      } else {
+        return Result.failure(
+          ApiError(
+            message: 'не вдалось отримати баланс',
+            statusCode: response.statusCode,
+          ),
+        );
+      }
+    } on DioException catch (e) {
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    } catch (_) {
+      return Result.failure(ApiError(message: 'Невідома помилка'));
     }
   }
 }
