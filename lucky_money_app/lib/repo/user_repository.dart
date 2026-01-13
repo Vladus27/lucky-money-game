@@ -130,4 +130,58 @@ class UserRepository {
       return Result.failure(ApiError(message: 'Невідома помилка'));
     }
   }
+
+  Future<Result<String>> setWalletAddressConnect() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(ApiError(message: 'Ти не залогінений'));
+      }
+      final response = await _dio.put(
+        "$_basicUrl/api/auth/wallet-address",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data["isOk"] == true) {
+        return Result.success('гаманець успішно встановлено');
+      } else {
+        return Result.failure(ApiError(message: 'не вдалось задати гаманець'));
+      }
+    } on DioException catch (e) {
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    }
+  }
+
+  Future<Result<String?>> getWalletAddressConnect() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(ApiError(message: 'Ти не залогінений'));
+      }
+      final response = await _dio.put(
+        "$_basicUrl/api/auth/wallet-address",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data["isOk"] == true) {
+        final responseData = response.data["value"];
+
+        return Result.success(responseData);
+      } else {
+        return Result.failure(
+          ApiError(message: 'не вдалось отримати гаманець'),
+        );
+      }
+    } on DioException catch (e) {
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    }
+  }
 }
