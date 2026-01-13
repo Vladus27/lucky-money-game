@@ -14,7 +14,7 @@ class HomeFabWidget extends StatelessWidget {
         return FloatingActionButton(
           onPressed: isAuthenticated
               ? () {
-                  Navigator.pushNamed(context, '/game');
+                  Navigator.pushNamed(context, '/wallet');
                 }
               : null,
           child: const Icon(Icons.wallet_rounded),
