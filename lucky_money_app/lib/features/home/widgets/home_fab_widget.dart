@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:lucky_money_app/services/secure_storage_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 
-class HomeFabWidget extends StatelessWidget {
+class HomeFabWidget extends ConsumerWidget {
   const HomeFabWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final storage = SecureStorageService();
-    return FutureBuilder(
-      future: storage.getToken(),
-      builder: (context, asyncSnapshot) {
-        final isAuthenticated = asyncSnapshot.data != null;
-        return FloatingActionButton(
-          onPressed: isAuthenticated
-              ? () {
-                  Navigator.pushNamed(context, '/wallet');
-                }
-              : null,
-          child: const Icon(Icons.wallet_rounded),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userAsync = ref.watch(userProvider);
+    final isAuthenticated = userAsync.hasValue && userAsync.value!.isSuccess;
+    return FloatingActionButton(
+      onPressed: isAuthenticated
+          ? () {
+              Navigator.pushNamed(context, '/wallet');
+            }
+          : null,
+      child: const Icon(Icons.wallet_rounded),
     );
   }
 }
