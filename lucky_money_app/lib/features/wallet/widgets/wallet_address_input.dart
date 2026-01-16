@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/common/constant/wallet_strings.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 
-class WalletAddressInput extends StatefulWidget {
+class WalletAddressInput extends ConsumerStatefulWidget {
   const WalletAddressInput({
     super.key,
     required this.userAddressInputLabel,
@@ -11,10 +13,10 @@ class WalletAddressInput extends StatefulWidget {
   final String userAddressInputHint;
 
   @override
-  State<WalletAddressInput> createState() => _WalletAddressInputState();
+  ConsumerState<WalletAddressInput> createState() => _WalletAddressInputState();
 }
 
-class _WalletAddressInputState extends State<WalletAddressInput> {
+class _WalletAddressInputState extends ConsumerState<WalletAddressInput> {
   final TextEditingController _walletController = TextEditingController();
   final FocusNode _addressFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
@@ -29,6 +31,7 @@ class _WalletAddressInputState extends State<WalletAddressInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Form(
       key: _formKey,
       child: TextFormField(
@@ -42,16 +45,7 @@ class _WalletAddressInputState extends State<WalletAddressInput> {
 
           suffixIcon: IconButton(
             icon: const Icon(Icons.playlist_add_outlined),
-            onPressed: () {
-              final bool isValid = _formKey.currentState?.validate() ?? false;
-
-              if (isValid) {
-                debugPrint('Адреса валідна: ${_walletController.text}');
-                _addressFocus.unfocus();
-              } else {
-                debugPrint('Помилка валідації');
-              }
-            },
+            onPressed: _submitAddress,
           ),
           hintStyle: TextStyle(
             color: theme.colorScheme.onPrimary.withValues(alpha: .5),
@@ -99,5 +93,32 @@ class _WalletAddressInputState extends State<WalletAddressInput> {
     }
 
     return null;
+  }
+
+  Future<void> _submitAddress() async {
+    final bool isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!isValid) {
+      debugPrint('Помилка валідації');
+      return;
+    }
+
+    debugPrint('Адреса валідна: ${_walletController.text}');
+    _addressFocus.unfocus();
+    final result = await ref
+        .read(userControllerProvider)
+        .setWalletAddressConnect(_walletController.text);
+
+    if (result.isSuccess) {
+      _showSnackBar(result.data!);
+      // need to udate the address if it appears
+      ref.invalidate(getWalletAddressProvider);
+    } else {
+      _showSnackBar(result.error!.message);
+    }
+  }
+
+  void _showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 }
