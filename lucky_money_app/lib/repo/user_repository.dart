@@ -131,7 +131,7 @@ class UserRepository {
     }
   }
 
-  Future<Result<String>> setWalletAddressConnect() async {
+  Future<Result<String>> setWalletAddressConnect(String address) async {
     try {
       final token = await storage.getToken();
       if (token == null) {
@@ -140,9 +140,10 @@ class UserRepository {
       final response = await _dio.put(
         "$_basicUrl/api/auth/wallet-address",
         options: Options(headers: {'Authorization': 'Bearer $token'}),
+        queryParameters: {'walletAddress': address},
       );
       if (response.data["isOk"] == true) {
-        return Result.success('гаманець успішно встановлено');
+        return Result.success('Адресу гаманця успішно встановлено');
       } else {
         return Result.failure(ApiError(message: 'не вдалось задати гаманець'));
       }
