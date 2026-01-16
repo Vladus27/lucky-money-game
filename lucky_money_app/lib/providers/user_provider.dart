@@ -15,10 +15,6 @@ final balanceProvider = FutureProvider<Result<String>>((ref) async {
   return ref.read(userControllerProvider).getBalance();
 });
 
-final setWalletAddressProvider = FutureProvider<Result<String>>((ref) async {
-  return ref.read(userControllerProvider).setWalletAddressConnect();
-});
-
 final getWalletAddressProvider = FutureProvider<Result<String?>>((ref) async {
   return ref.read(userControllerProvider).getWalletAddressConnect();
 });
