@@ -4,7 +4,7 @@ import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_input.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_requirements.dart';
 import 'package:lucky_money_app/features/authentication/widgets/username_input.dart';
-import 'package:lucky_money_app/providers/auth_provider.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 import 'package:lucky_money_app/repo/user_repository.dart';
 
 class AuthForm extends ConsumerStatefulWidget {

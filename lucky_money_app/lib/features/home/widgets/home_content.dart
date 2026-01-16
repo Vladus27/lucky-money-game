@@ -4,7 +4,7 @@ import 'package:lucky_money_app/common/constant/home_strings.dart';
 
 import 'package:lucky_money_app/common/constant/image_constants.dart';
 import 'package:lucky_money_app/common/widgets/box_shadow.dart';
-import 'package:lucky_money_app/providers/auth_provider.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 // import 'package:lucky_money_app/repo/secure_storage_service.dart';
 
 class HomeContent extends ConsumerWidget {

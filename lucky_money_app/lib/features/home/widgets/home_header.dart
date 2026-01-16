@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/common/constant/image_constants.dart';
 import 'package:lucky_money_app/features/home/widgets/home_header_guest.dart';
 import 'package:lucky_money_app/features/home/widgets/home_header_logged.dart';
-import 'package:lucky_money_app/providers/auth_provider.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 
 class HomeHeader extends ConsumerWidget implements PreferredSizeWidget {
   const HomeHeader({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucky_money_app/providers/auth_provider.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 import 'package:lucky_money_app/services/secure_storage_service.dart';
 
 class HomeHeaderLogged extends ConsumerWidget {
