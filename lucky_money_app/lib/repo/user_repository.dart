@@ -163,7 +163,7 @@ class UserRepository {
       if (token == null) {
         return Result.failure(ApiError(message: 'Ти не залогінений'));
       }
-      final response = await _dio.put(
+      final response = await _dio.get(
         "$_basicUrl/api/auth/wallet-address",
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
@@ -173,7 +173,10 @@ class UserRepository {
         return Result.success(responseData);
       } else {
         return Result.failure(
-          ApiError(message: 'не вдалось отримати гаманець'),
+          ApiError(
+            message: 'не вдалось отримати гаманець',
+            statusCode: response.statusCode,
+          ),
         );
       }
     } on DioException catch (e) {
