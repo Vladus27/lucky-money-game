@@ -19,6 +19,9 @@ class UserRepository {
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: {'userName': username, 'password': password},
       );
+      if (response.data["statusCode"] == 20001) {
+        return 'Користувач вже є під таким псевдонімом';
+      }
 
       if (response.data['isOk'] == false) {
         return 'Невірний формат логіну або паролю';
@@ -47,6 +50,7 @@ class UserRepository {
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: {'userName': username, 'password': password},
       );
+
       if (response.data['isOk'] == false) {
         return 'Невірний логін або пароль';
       }
@@ -58,9 +62,14 @@ class UserRepository {
       return null;
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
-        return 'Невірний логін або пароль';
+        return 'Помилка сервера (${e.response?.statusCode}';
       }
-      return 'Помилка сервера (${e.response?.statusCode})';
+
+      if (e.response == null) {
+        return 'Помилка сервера: ${e.message}';
+      } else {
+        return 'Помилка сервера: ${e.message} статускод: (${e.response?.statusCode})';
+      }
     }
   }
 
