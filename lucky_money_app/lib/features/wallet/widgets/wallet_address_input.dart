@@ -17,9 +17,15 @@ class WalletAddressInput extends ConsumerStatefulWidget {
 }
 
 class _WalletAddressInputState extends ConsumerState<WalletAddressInput> {
-  final TextEditingController _walletController = TextEditingController();
+  late final TextEditingController _walletController = TextEditingController();
   final FocusNode _addressFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _initWalletAddress();
+  }
 
   @override
   void dispose() {
@@ -93,6 +99,17 @@ class _WalletAddressInputState extends ConsumerState<WalletAddressInput> {
     }
 
     return null;
+  }
+
+  Future<void> _initWalletAddress() async {
+    final result = await ref
+        .read(userControllerProvider)
+        .getWalletAddressConnect();
+    if (result.isSuccess) {
+      _walletController.text = result.data ?? '';
+    } else {
+      _showSnackBar(result.error!.message);
+    }
   }
 
   Future<void> _submitAddress() async {
