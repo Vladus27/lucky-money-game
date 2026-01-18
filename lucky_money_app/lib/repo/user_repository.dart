@@ -155,7 +155,21 @@ class UserRepository {
         return Result.success('Адресу гаманця успішно встановлено');
       } else {
         return Result.failure(ApiError(message: 'не вдалось задати гаманець'));
+      if (response.data["statusCode"] == 20001) {
+        return Result.failure(
+          ApiError(message: 'Данний адрес вже встановлений'),
+        );
       }
+      if (response.data["isOk"] != true) {
+        return Result.failure(
+          ApiError(
+            message: 'не вдалось задати гаманець',
+            statusCode: response.statusCode,
+          ),
+        );
+      }
+
+      return Result.success('Адресу гаманця успішно встановлено');
     } on DioException catch (e) {
       return Result.failure(
         ApiError(
