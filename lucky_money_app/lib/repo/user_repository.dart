@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:lucky_money_app/common/models/api_error.dart';
+import 'package:lucky_money_app/common/models/deposit_model.dart';
 import 'package:lucky_money_app/common/models/environment.dart';
 import 'package:lucky_money_app/common/models/user.dart';
 import 'package:lucky_money_app/services/secure_storage_service.dart';
@@ -202,6 +203,20 @@ class UserRepository {
           ),
         );
       }
+    } on DioException catch (e) {
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    }
+  }
+
+  Future<Result<Deposit>> getDepositData() async {
+    try {
+      final response = await _dio.get("$_basicUrl/api/admin/faucet");
+      return Result.success(Deposit.fromJson(response.data));
     } on DioException catch (e) {
       return Result.failure(
         ApiError(
