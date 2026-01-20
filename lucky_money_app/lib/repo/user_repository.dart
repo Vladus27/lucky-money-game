@@ -215,7 +215,9 @@ class UserRepository {
 
   Future<Result<Deposit>> getDepositData() async {
     try {
-      final response = await _dio.get("$_basicUrl/api/admin/faucet");
+      final response = await _dio.get(
+        "$_basicUrl/api/crypto-wallet/deposit-address",
+      );
       return Result.success(Deposit.fromJson(response.data));
     } on DioException catch (e) {
       return Result.failure(
