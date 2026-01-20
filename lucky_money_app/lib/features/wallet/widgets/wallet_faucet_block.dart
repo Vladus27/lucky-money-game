@@ -13,7 +13,7 @@ class WalletFaucetBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
       onPressed: openLink,
-      label: const Text('Open Faucet'),
+      label: Text(faucetLabel),
       icon: const Icon(Icons.link),
     );
   }
