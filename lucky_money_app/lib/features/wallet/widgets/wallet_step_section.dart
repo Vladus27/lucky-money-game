@@ -8,6 +8,7 @@ import 'package:lucky_money_app/features/wallet/widgets/wallet_faucet_block.dart
 import 'package:lucky_money_app/features/wallet/widgets/wallet_first_step.dart';
 import 'package:lucky_money_app/features/wallet/widgets/wallet_treasury_block.dart';
 import 'package:lucky_money_app/providers/user_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class WalletStepSection extends ConsumerWidget {
   const WalletStepSection({super.key});
@@ -56,7 +57,9 @@ class WalletStepSection extends ConsumerWidget {
                 stepDescription: walletStep2.stepDescription!,
                 stepContent: WalletFaucetBlock(
                   faucetLabel: walletStep2.faucetLabel!,
-                  openLink: () {},
+                  openLink: () {
+                    _openFaucetLink(depositResult.data!.faucetUrl);
+                  },
                 ),
               ),
               const SizedBox(height: 24),
@@ -74,6 +77,17 @@ class WalletStepSection extends ConsumerWidget {
           );
         }
       },
+    );
+  }
+
+  Future<void> _openFaucetLink(String url) async {
+    final uri = Uri.parse(
+      'https://testnet.whitechain.io/faucet',
+    ); // in near future change to the url variable
+    await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+      webOnlyWindowName: '_blank',
     );
   }
 }
