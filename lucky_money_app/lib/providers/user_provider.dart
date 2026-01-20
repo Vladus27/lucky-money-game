@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/common/models/api_error.dart';
+import 'package:lucky_money_app/common/models/deposit_model.dart';
 import 'package:lucky_money_app/common/models/user.dart';
 import 'package:lucky_money_app/repo/user_repository.dart';
 
@@ -17,4 +18,8 @@ final balanceProvider = FutureProvider<Result<String>>((ref) async {
 
 final getWalletAddressProvider = FutureProvider<Result<String?>>((ref) async {
   return ref.read(userControllerProvider).getWalletAddressConnect();
+});
+
+final getDepositDataProvider = FutureProvider<Result<Deposit>>((ref) async {
+  return ref.read(userControllerProvider).getDepositData();
 });
