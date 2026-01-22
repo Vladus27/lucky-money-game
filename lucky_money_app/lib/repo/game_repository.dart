@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:lucky_money_app/common/models/api_error.dart';
 import 'package:lucky_money_app/common/models/environment.dart';
 import 'package:lucky_money_app/common/models/game/cashout.dart';
+import 'package:lucky_money_app/common/models/game/current_game.dart';
 import 'package:lucky_money_app/common/models/game/reveal_bomb.dart';
 import 'package:lucky_money_app/services/secure_storage_service.dart';
 
@@ -118,6 +119,47 @@ class GameRepository {
         return Result.failure(
           ApiError(message: 'Гри не знайдено щоб вивести кошти'),
         );
+      }
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    }
+  }
+
+  Future<Result<CurrentGame>> getCurrentGame() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+      }
+      final response = await _dio.post(
+        '$_basicUrl/api/mines-game/current',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
+      if (!response.data['isOk']) {
+        return Result.failure(ApiError(message: 'сталась бідося'));
+      }
+      final responseData = response.data['value'];
+      if (responseData == null) {
+        return Result.failure(ApiError(message: 'Поточної гри не знайдено'));
+      }
+      final currentGameData = CurrentGame.fromJson(responseData);
+      return Result.success(currentGameData);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+      }
+      if (e.response?.statusCode == 404) {
+        return Result.failure(ApiError(message: 'Поточної гри не знайдено'));
       }
       return Result.failure(
         ApiError(
