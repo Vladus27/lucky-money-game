@@ -18,7 +18,7 @@ class GameRepository {
         return Result.failure(ApiError(message: 'Ви не авторизовані'));
       }
       final response = await _dio.post(
-        '$_basicUrl/api/mines-game/start​',
+        '$_basicUrl/api/mines-game/start',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
