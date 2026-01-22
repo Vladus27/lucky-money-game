@@ -1,11 +1,26 @@
+enum CurrentGameStatus { active, lost, cashedOut }
+
+CurrentGameStatus gameStatusFromInt(int value) {
+  switch (value) {
+    case 0:
+      return CurrentGameStatus.active;
+    case 1:
+      return CurrentGameStatus.lost;
+    case 2:
+      return CurrentGameStatus.cashedOut;
+    default:
+      return CurrentGameStatus.lost;
+  }
+}
+
 class CurrentGame {
   final String id;
-  final double minesCount;
+  final int minesCount;
   final double currentPayoutAmount; // money you get if you cashout now
   final double currentMultiplier;
   final double betAmount;
-  final double status; // 0, - Active = 0, Lost = 1, CashedOut = 2
-  final int createdAt; //: 1767197528, seconds
+  final CurrentGameStatus status; // 0, - Active = 0, Lost = 1, CashedOut = 2
+  final DateTime createdAt; //: 1767197528, seconds
   final Set<int>? revealedPositions;
 
   const CurrentGame({
@@ -24,13 +39,13 @@ class CurrentGame {
     return CurrentGame(
       id: json['id'],
       betAmount: json['betAmount'],
-      createdAt: json['createdAt'],
+      createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] * 1000),
       currentMultiplier: json['currentMultiplier'],
       currentPayoutAmount: json['currentPayoutAmount'],
       minesCount: json['minesCount'],
-      status: json['status'],
+      status: gameStatusFromInt(json['status']),
       revealedPositions: rawMines == null
-          ? null
+          ? {}
           : (rawMines as List).map((e) => e['positionId'] as int).toSet(),
     );
   }
