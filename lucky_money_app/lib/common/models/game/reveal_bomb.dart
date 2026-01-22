@@ -4,7 +4,7 @@ class RevealBomb {
   final double currentCashoutAmount;
   final Set<int>? minePositions;
 
-  RevealBomb({
+  const RevealBomb({
     required this.isBomb,
     required this.currentMultiplier,
     required this.currentCashoutAmount,
