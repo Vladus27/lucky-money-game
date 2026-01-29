@@ -1,12 +1,12 @@
 enum CurrentGameStatus { active, lost, cashedOut }
 
-CurrentGameStatus gameStatusFromInt(int value) {
+CurrentGameStatus gameStatusFrom(String value) {
   switch (value) {
-    case 0:
+    case "Active":
       return CurrentGameStatus.active;
-    case 1:
+    case "Lost":
       return CurrentGameStatus.lost;
-    case 2:
+    case "CashedOut":
       return CurrentGameStatus.cashedOut;
     default:
       return CurrentGameStatus.lost;
@@ -18,10 +18,11 @@ class CurrentGame {
   final int minesCount;
   final double currentPayoutAmount; // money you get if you cashout now
   final double currentMultiplier;
+  final double nextMultiplier;
   final double betAmount;
-  final CurrentGameStatus status; // 0, - Active = 0, Lost = 1, CashedOut = 2
+  final CurrentGameStatus status;
   final DateTime createdAt; //: 1767197528, seconds
-  final Set<int>? revealedPositions;
+  final Set<int> revealedPositions;
 
   const CurrentGame({
     required this.id,
@@ -29,24 +30,26 @@ class CurrentGame {
     required this.createdAt,
     required this.currentMultiplier,
     required this.currentPayoutAmount,
+    required this.nextMultiplier,
     required this.minesCount,
     required this.status,
     required this.revealedPositions,
   });
 
   factory CurrentGame.fromJson(Map<String, dynamic> json) {
-    final rawMines = json['minePositions'];
+    final rawOpenSafes = json['revealedPositions'] as List;
     return CurrentGame(
       id: json['id'],
       betAmount: json['betAmount'],
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] * 1000),
       currentMultiplier: json['currentMultiplier'],
       currentPayoutAmount: json['currentPayoutAmount'],
+      nextMultiplier: json['nextMultiplier'],
       minesCount: json['minesCount'],
-      status: gameStatusFromInt(json['status']),
-      revealedPositions: rawMines == null
+      status: gameStatusFrom(json['status']),
+      revealedPositions: rawOpenSafes.isEmpty
           ? {}
-          : (rawMines as List).map((e) => e['positionId'] as int).toSet(),
+          : (rawOpenSafes).map((e) => e['positionId'] as int).toSet(),
     );
   }
 }
