@@ -5,8 +5,8 @@ class Cashout {
 
   factory Cashout.fromJson(Map<String, dynamic> json) {
     return Cashout(
-      amount: json['amount'] as double,
-      multiplier: json['multiplier'] as double,
+      amount: (json['amount'] as num).toDouble(),
+      multiplier: (json['multiplier'] as num).toDouble(),
     );
   }
 }
