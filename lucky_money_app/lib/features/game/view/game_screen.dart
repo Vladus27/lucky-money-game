@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucky_money_app/common/models/game/current_game.dart';
 import 'package:lucky_money_app/common/models/game/game_model.dart';
+import 'package:lucky_money_app/common/models/game/game_state.dart';
 
 import 'package:lucky_money_app/features/game/widgets/game_button_act.dart';
 import 'package:lucky_money_app/features/game/widgets/game_error_state.dart';
@@ -20,88 +21,104 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen> {
-  final _game = GameRepository();
-  bool _isLoading = false;
-  Map<String, dynamic> isError = {'error': false, 'message': ''};
-  GameStatus _gameStatus = GameStatus.cashedOut;
-  CurrentGame? _currentGame;
-
-  Future<void> _getCurrentGame() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    final currentGame = await _game.getCurrentGame();
-
-    if (!currentGame.isSuccess) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(currentGame.error!.message),
-          ),
-        );
-      });
-      if (currentGame.error!.statusCode != 200) {
-        setState(() {
-          isError['error'] = true;
-          isError['message'] = currentGame.error!.message;
-          _isLoading = false;
-        });
-        return;
-      }
-    }
-
-    if (currentGame.data == null) {
-      setState(() {
-        _gameStatus = GameStatus.cashedOut;
-        _isLoading = false;
-      });
-      return;
-    }
-
-    _currentGame = currentGame.data;
-    setState(() {
-      _gameStatus = GameStatus.active;
-      _isLoading = false;
-    });
-  }
-
   @override
   void initState() {
-    _getCurrentGame();
     super.initState();
+    // При ініціалізації екрану provider автоматично завантажить дані
+    // через метод build() в GameNotifier
   }
 
   @override
   Widget build(BuildContext context) {
+    final gameState = ref.watch(gameNotifierProvider);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Lucky-money')),
-      body: Padding(padding: const EdgeInsets.all(24.0), child: _content()),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: gameState.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => GameErrorState(message: error.toString()),
+          data: (state) {
+            // Показуємо snackbar з помилкою, але не блокуємо UI
+            if (state.hasError) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(state.errorMessage!),
+                    action: SnackBarAction(
+                      label: 'OK',
+                      onPressed: () {
+                        ref.read(gameNotifierProvider.notifier).clearError();
+                      },
+                    ),
+                  ),
+                );
+              });
+
+              // Якщо це критична помилка (не тільки "гри немає")
+              if (state.game == null) {
+                return GameErrorState(message: state.errorMessage!);
+              }
+            }
+
+            return _GameContent(gameState: state);
+          },
+        ),
+      ),
     );
   }
+}
 
-  Widget _content() {
-    if (isError['error']) {
-      return GameErrorState(message: isError['message']);
+class _GameContent extends ConsumerWidget {
+  final GameState gameState;
+
+  const _GameContent({required this.gameState});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentGame = gameState.game;
+
+    // Якщо гри немає - показуємо інтерфейс для старту нової гри
+    if (currentGame == null) {
+      return Column(
+        children: [
+          const Row(
+            children: [
+              Expanded(child: GameStatCard.multiplier()),
+              const SizedBox(width: 12),
+              Expanded(child: GameStatCard.payOut()),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: GameGrid(),
+          ),
+          GameButtonAct(
+            gameStatus: GameStatus.cashedOut,
+            nextCof: '1.0',
+            handleBet: () => _showBottomSheet(context, ref),
+          ),
+        ],
+      );
     }
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+
+    // Є активна гра
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: GameStatCard.multiplier(
-                value: _currentGame?.currentMultiplier.toString(),
+                value: currentGame.currentMultiplier.toString(),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: GameStatCard.payOut(
-                value: _currentGame?.currentPayoutAmount.toString(),
+                value: currentGame.currentPayoutAmount.toString(),
               ),
             ),
           ],
@@ -111,39 +128,45 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           child: GameGrid(),
         ),
         GameButtonAct(
-          gameStatus: _gameStatus,
-          nextCof: '_currentGame!.nextMultiplier.toString()',
-          handleBet: _handleBet,
+          gameStatus: currentGame.status,
+          nextCof: "currentGame.nextMultiplier?.toString() ?? '0'",
+          handleBet: () => _handleBet(context, ref, currentGame.status),
         ),
       ],
     );
   }
 
-  void _handleBet() {
-    if (_gameStatus == GameStatus.active) {
-      _onCashout();
-      return;
+  void _handleBet(BuildContext context, WidgetRef ref, GameStatus status) {
+    if (status == GameStatus.active) {
+      _onCashout(context, ref);
     } else {
-      return _showBottomSheet();
+      _showBottomSheet(context, ref);
     }
   }
 
-  Future<void> _onCashout() async {
-    var cashout = await _game.getCashout();
-    ref.invalidate(balanceProvider);
-    setState(() {
-      _gameStatus = GameStatus.cashedOut;
-    });
+  Future<void> _onCashout(BuildContext context, WidgetRef ref) async {
+    final success = await ref.read(gameNotifierProvider.notifier).cashout(ref);
+
+    if (context.mounted && success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('Виплата успішна!'),
+        ),
+      );
+    }
   }
 
-  void _showBottomSheet() {
+  void _showBottomSheet(BuildContext context, WidgetRef ref) {
     showModalBottomSheet<void>(
       barrierColor: Colors.black.withValues(alpha: 0.9),
       isScrollControlled: true,
       context: context,
-      builder: (_) {
-        return const GameSettingBottomSheet();
-      },
-    );
+      builder: (_) => const GameSettingBottomSheet(),
+    ).then((_) {
+      // Після закриття bottom sheet оновлюємо стан гри
+      // (на випадок якщо користувач створив нову гру)
+      ref.read(gameNotifierProvider.notifier).refresh();
+    });
   }
 }
