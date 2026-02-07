@@ -94,17 +94,24 @@ class _GameGridState extends ConsumerState<GameGrid> {
 
     final game = gameState.game!;
     final revealedPositions = game.revealedPositions;
+    final safePositions = gameState.safeRevealedPositions;
 
-    // Якщо гра програна - показуємо всі бомби
+    // Якщо гра програна
     if (game.status == GameStatus.lost) {
+      // Перевіряємо чи це позиція з бомбою
       if (revealedPositions.contains(position)) {
-        return CellState.mine;
+        return CellState.mine; // Це бомба
       }
-      // Інші відкриті позиції - безпечні
-      return CellState.hidden; // Залишаємо закритими ті що не відкрили
+
+      // Показуємо безпечні клітинки які відкрили до програшу
+      if (safePositions.contains(position)) {
+        return CellState.safe;
+      }
+
+      return CellState.hidden;
     }
 
-    // Активна гра або виграна - показуємо тільки відкриті безпечні
+    // Активна гра - показуємо тільки відкриті безпечні
     if (revealedPositions.contains(position)) {
       return CellState.safe;
     }
@@ -210,7 +217,6 @@ class _GameCellState extends State<_GameCell>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  late Animation<double> _glowAnimation;
 
   @override
   void initState() {
@@ -224,11 +230,6 @@ class _GameCellState extends State<_GameCell>
       begin: 0.8,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
-
-    _glowAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
 
   @override
@@ -311,21 +312,20 @@ class _GameCellState extends State<_GameCell>
                       : const Color(0xFF3d4575),
                   width: isRevealed ? 3 : 2,
                 ),
-                boxShadow: isRevealed
-                    ? [
-                        BoxShadow(
-                          color:
-                              (widget.state == CellState.safe
-                                      ? const Color(0xFF2ecc71)
-                                      : const Color(0xFFe74c3c))
-                                  .withValues(
-                                    alpha: _glowAnimation.value * 0.6,
-                                  ),
-                          blurRadius: 20,
-                          spreadRadius: 3,
-                        ),
-                      ]
-                    : null,
+                boxShadow: [
+                  if (widget.state == CellState.safe)
+                    BoxShadow(
+                      color: const Color(0xFF2ecc71).withValues(alpha: 0.6),
+                      blurRadius: 20,
+                      spreadRadius: 3,
+                    ),
+                  if (widget.state == CellState.mine)
+                    BoxShadow(
+                      color: const Color(0xFFe74c3c).withValues(alpha: 0.6),
+                      blurRadius: 20,
+                      spreadRadius: 3,
+                    ),
+                ],
               ),
               alignment: Alignment.center,
               child: child,

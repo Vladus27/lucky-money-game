@@ -9,6 +9,21 @@ class GameStatCard extends StatelessWidget {
     required this.icon,
     required this.isGradientNeeded,
   });
+  const GameStatCard.payOut({
+    super.key,
+    this.label = 'виплата',
+    String? value,
+    this.icon = Icons.account_balance_wallet,
+    this.isGradientNeeded = true,
+  }) : value = value ?? '0.0';
+  const GameStatCard.multiplier({
+    super.key,
+    this.label = 'множник',
+    String? value,
+    this.icon = Icons.trending_up,
+    this.isGradientNeeded = false,
+  }) : value = value ?? 'x0.0';
+
   final String label;
   final IconData icon;
   final String value;

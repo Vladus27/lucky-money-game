@@ -11,7 +11,7 @@ class GameRepository {
   final String _basicUrl = Environment.apiUrl;
   final storage = SecureStorageService();
 
-  Future<Result<String?>> gameStart({
+  Future<Result<String>> gameStart({
     required double betAmount,
     required int minesCount,
   }) async {
@@ -36,7 +36,7 @@ class GameRepository {
       if (response.data['statusCode'] == 30002) {
         return Result.failure(ApiError(message: 'Недостатньо коштів'));
       }
-      return Result.success(null);
+      return Result.success('Гра успішно почалась');
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
         return Result.failure(ApiError(message: 'Ви не авторизовані'));
@@ -91,7 +91,7 @@ class GameRepository {
       if (token == null) {
         return Result.failure(ApiError(message: 'Ви не авторизовані'));
       }
-      final response = await _dio.post(
+      final response = await _dio.get(
         '$_basicUrl/api/mines-game/cashout',
         options: Options(
           headers: {
@@ -133,9 +133,11 @@ class GameRepository {
     try {
       final token = await storage.getToken();
       if (token == null) {
-        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+        return Result.failure(
+          ApiError(message: 'Ви не авторизовані', statusCode: 401),
+        );
       }
-      final response = await _dio.post(
+      final response = await _dio.get(
         '$_basicUrl/api/mines-game/current',
         options: Options(
           headers: {
@@ -150,7 +152,26 @@ class GameRepository {
       }
       final responseData = response.data['value'];
       if (responseData == null) {
-        return Result.failure(ApiError(message: 'Поточної гри не знайдено'));
+        // return Result.success(
+        //   CurrentGame(
+        //     id: 'id',
+        //     betAmount: 0,
+        //     createdAt: DateTime.now(),
+        //     currentMultiplier: 0,
+        //     currentPayoutAmount: 0,
+        //     // nextMultiplier: 1,
+        //     minesCount: 0,
+        //     status: GameStatus.cashedOut,
+        //     revealedPositions: {},
+        //   ),
+        // );
+
+        return Result.failure(
+          ApiError(
+            message: 'Поточної гри не знайдено',
+            statusCode: response.data['statusCode'],
+          ),
+        );
       }
       final currentGameData = CurrentGame.fromJson(responseData);
       return Result.success(currentGameData);

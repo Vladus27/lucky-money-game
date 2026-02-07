@@ -17,12 +17,12 @@ class RevealBomb {
     final rawMines = json['minePositions'];
     return RevealBomb(
       isBomb: json['isBomb'] as bool,
-      currentMultiplier: json['currentMultiplier'] as double,
-      currentCashoutAmount: json['currentCashoutAmount'] as double,
+      currentMultiplier: (json['currentMultiplier'] as num).toDouble(),
+      currentCashoutAmount: (json['currentCashoutAmount'] as num).toDouble(),
       minePositions: rawMines == null
           ? {}
           : (rawMines as List).map((e) => e['positionId'] as int).toSet(),
-      nextMultiplier: json["nextMultiplier"],
+      nextMultiplier: (json["nextMultiplier"] as num).toDouble(),
     );
   }
 }

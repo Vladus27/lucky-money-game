@@ -12,7 +12,7 @@ class GameChoiceBet extends ConsumerWidget {
   });
 
   final double balance;
-  final int bet;
+  final double bet;
   final TextEditingController betController;
 
   @override
@@ -47,11 +47,15 @@ class GameChoiceBet extends ConsumerWidget {
               if (selected) {
                 betController.text = bet.toString();
                 betNotifier.setBet(bet);
-                ref.read(betValidatorProvider.notifier).updateValidation(bet);
+                ref
+                    .read(betValidatorProvider.notifier)
+                    .updateValidation(bet, balance);
               } else {
                 betController.clear();
                 betNotifier.setBet(0);
-                ref.read(betValidatorProvider.notifier).updateValidation(null);
+                ref
+                    .read(betValidatorProvider.notifier)
+                    .updateValidation(null, balance);
               }
             }
           : null,

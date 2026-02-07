@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class GameBetNotifier extends Notifier<int> {
+class GameBetNotifier extends Notifier<double> {
   @override
-  int build() => 0;
+  double build() => 0;
 
-  void setBet(int bet) {
+  void setBet(double bet) {
     state = bet;
     // print('betNotifier state is now $state');
   }
@@ -14,6 +14,6 @@ class GameBetNotifier extends Notifier<int> {
   }
 }
 
-final gameBetProvider = NotifierProvider<GameBetNotifier, int>(
+final gameBetProvider = NotifierProvider<GameBetNotifier, double>(
   GameBetNotifier.new,
 );

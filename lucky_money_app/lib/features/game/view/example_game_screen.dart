@@ -117,7 +117,7 @@ class _ExampleGameScreenState extends State<ExampleGameScreen> {
                   const SizedBox(width: 12),
                   _buildStatCard(
                     "Виплата",
-                    "${(bet * currentMultiplier).toStringAsFixed(2)}",
+                    (bet * currentMultiplier).toStringAsFixed(2),
                     Icons.account_balance_wallet,
                     Colors.amber,
                   ),
@@ -181,7 +181,7 @@ class _ExampleGameScreenState extends State<ExampleGameScreen> {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F172A).withOpacity(0.8),
+                  color: const Color(0xFF0F172A).withValues(alpha: 0.8),
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(40),
                   ),
@@ -386,7 +386,7 @@ class _ExampleGameScreenState extends State<ExampleGameScreen> {
               ? [
                   BoxShadow(
                     color: (val ? Colors.green : const Color(0xFFB11226))
-                        .withOpacity(0.3),
+                        .withValues(alpha: 0.3),
                     blurRadius: 15,
                     spreadRadius: 1,
                   ),

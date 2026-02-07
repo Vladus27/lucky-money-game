@@ -10,26 +10,12 @@ import 'package:lucky_money_app/features/game/widgets/game_grid.dart';
 import 'package:lucky_money_app/features/game/widgets/game_setting_bottom_sheet.dart';
 import 'package:lucky_money_app/features/game/widgets/game_stat_card.dart';
 import 'package:lucky_money_app/providers/game_provider.dart';
-import 'package:lucky_money_app/providers/user_provider.dart';
-import 'package:lucky_money_app/repo/game_repository.dart';
 
-class GameScreen extends ConsumerStatefulWidget {
+class GameScreen extends ConsumerWidget {
   const GameScreen({super.key});
 
   @override
-  ConsumerState<GameScreen> createState() => _GameScreenState();
-}
-
-class _GameScreenState extends ConsumerState<GameScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // При ініціалізації екрану provider автоматично завантажить дані
-    // через метод build() в GameNotifier
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameNotifierProvider);
 
     return Scaffold(
@@ -81,15 +67,18 @@ class _GameContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentGame = gameState.game;
 
+    // Визначаємо статус гри
+    final gameStatus = currentGame?.status ?? GameStatus.cashedOut;
+
     // Якщо гри немає - показуємо інтерфейс для старту нової гри
     if (currentGame == null) {
       return Column(
         children: [
           const Row(
             children: [
-              Expanded(child: GameStatCard.multiplier()),
-              const SizedBox(width: 12),
-              Expanded(child: GameStatCard.payOut()),
+              Expanded(child: GameStatCard.multiplier(value: null)),
+              SizedBox(width: 12),
+              Expanded(child: GameStatCard.payOut(value: null)),
             ],
           ),
           const Padding(
@@ -105,20 +94,20 @@ class _GameContent extends ConsumerWidget {
       );
     }
 
-    // Є активна гра
+    // Є активна гра або завершена - показуємо актуальні дані
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: GameStatCard.multiplier(
-                value: currentGame.currentMultiplier.toString(),
+                value: currentGame.currentMultiplier.toStringAsFixed(2),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: GameStatCard.payOut(
-                value: currentGame.currentPayoutAmount.toString(),
+                value: currentGame.currentPayoutAmount.toStringAsFixed(2),
               ),
             ),
           ],
@@ -128,12 +117,24 @@ class _GameContent extends ConsumerWidget {
           child: GameGrid(),
         ),
         GameButtonAct(
-          gameStatus: currentGame.status,
-          nextCof: "currentGame.nextMultiplier?.toString() ?? '0'",
-          handleBet: () => _handleBet(context, ref, currentGame.status),
+          gameStatus: gameStatus,
+          nextCof: _getNextMultiplier(currentGame),
+          handleBet: () => _handleBet(context, ref, gameStatus),
         ),
       ],
     );
+  }
+
+  String _getNextMultiplier(CurrentGame game) {
+    // Для програної або кешаутнутої гри показуємо 0
+    if (game.status == GameStatus.lost || game.status == GameStatus.cashedOut) {
+      return '0.00';
+    }
+
+    // Для активної гри - наступний множник
+    // Якщо у тебе є nextMultiplier в CurrentGame - використай його
+    // Наразі використовую currentMultiplier * 2 як приклад
+    return (game.currentMultiplier * 2).toStringAsFixed(2);
   }
 
   void _handleBet(BuildContext context, WidgetRef ref, GameStatus status) {
@@ -145,13 +146,20 @@ class _GameContent extends ConsumerWidget {
   }
 
   Future<void> _onCashout(BuildContext context, WidgetRef ref) async {
+    // Зберігаємо суму виплати ДО кешауту
+    final currentPayoutAmount =
+        ref.read(gameNotifierProvider).value?.game?.currentPayoutAmount ?? 0;
+
     final success = await ref.read(gameNotifierProvider.notifier).cashout(ref);
 
     if (context.mounted && success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           behavior: SnackBarBehavior.floating,
-          content: Text('Виплата успішна!'),
+          backgroundColor: Colors.green,
+          content: Text(
+            '🎉 Вітаємо! Ви виграли ${currentPayoutAmount.toStringAsFixed(2)} грн!',
+          ),
         ),
       );
     }
@@ -166,7 +174,7 @@ class _GameContent extends ConsumerWidget {
     ).then((_) {
       // Після закриття bottom sheet оновлюємо стан гри
       // (на випадок якщо користувач створив нову гру)
-      ref.read(gameNotifierProvider.notifier).refresh();
+      // ref.read(gameNotifierProvider.notifier).refresh();
     });
   }
 }

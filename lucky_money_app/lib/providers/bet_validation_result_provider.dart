@@ -10,20 +10,18 @@ class BetValidationResult {
 }
 
 class BetValidator extends Notifier<BetValidationResult> {
-  late final int balance;
-  static const int minBet = 5;
+  static const double minBet = 1;
 
   @override
   BetValidationResult build() {
-    balance = 70; // ⚠️ у майбутньому з іншого провайдера
     return const BetValidationResult.invalid(null);
   }
 
-  void updateValidation(int? bet) {
-    state = validate(bet);
+  void updateValidation(double? bet, double currentBalance) {
+    state = validate(bet, currentBalance);
   }
 
-  BetValidationResult validate(int? bet) {
+  BetValidationResult validate(double? bet, double currentBalance) {
     if (bet == null) {
       return const BetValidationResult.invalid('Введи суму ставки');
     }
@@ -32,7 +30,7 @@ class BetValidator extends Notifier<BetValidationResult> {
       return const BetValidationResult.invalid('Мінімальна ставка — $minBet');
     }
 
-    if (bet > balance) {
+    if (bet > currentBalance) {
       return const BetValidationResult.invalid('Недостатньо коштів');
     }
 

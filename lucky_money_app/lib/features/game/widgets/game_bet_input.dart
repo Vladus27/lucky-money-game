@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucky_money_app/common/widgets/number_input_formatter.dart';
 import 'package:lucky_money_app/providers/bet_validation_result_provider.dart';
 import 'package:lucky_money_app/providers/game_bet_provider.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 
 class GameBetInput extends ConsumerStatefulWidget {
   const GameBetInput({super.key, required this.betController});
@@ -21,12 +22,17 @@ class _GameBetInputState extends ConsumerState<GameBetInput> {
     _controller = widget.betController;
 
     _controller.addListener(() {
-      final value = int.tryParse(_controller.text) ?? 0;
+      final value = double.tryParse(_controller.text) ?? 0;
       ref.read(gameBetProvider.notifier).setBet(value);
+      final asyncBalance = ref.watch(balanceProvider);
+      final double currentBalance = asyncBalance.maybeWhen(
+        data: (result) => double.tryParse(result.data ?? '0') ?? 0.0,
+        orElse: () => 0.0,
+      );
       // Валідуємо в реальному часі
       ref
           .read(betValidatorProvider.notifier)
-          .updateValidation(value == 0 ? null : value);
+          .updateValidation(value == 0 ? null : value, currentBalance);
     });
   }
 
@@ -37,9 +43,9 @@ class _GameBetInputState extends ConsumerState<GameBetInput> {
 
     return TextFormField(
       // maxLength: 64,
-      keyboardType: TextInputType.number,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
       controller: _controller,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      inputFormatters: [NumberInputFormatter()],
 
       decoration: InputDecoration(
         icon: Icon(
@@ -49,7 +55,7 @@ class _GameBetInputState extends ConsumerState<GameBetInput> {
         ),
         hintText: 'Введи свою ставку',
         labelText: 'Ставка',
-        helperText: 'мінімально: 5 WBT',
+        helperText: 'мінімально: 1 WBT',
         errorText: validation.error,
         filled: true,
         fillColor: theme.colorScheme.surfaceContainer,

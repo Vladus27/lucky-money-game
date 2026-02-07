@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:lucky_money_app/common/models/game/game_model.dart';
 import 'package:lucky_money_app/common/widgets/box_shadow.dart';
-import 'package:lucky_money_app/features/game/view/example_game_screen.dart';
 
 class GameButtonAct extends StatelessWidget {
   const GameButtonAct({
     super.key,
     required this.gameStatus,
+    required this.nextCof,
     required this.handleBet,
   });
+
   final GameStatus gameStatus;
+  final String nextCof;
   final void Function() handleBet;
 
   @override
   Widget build(BuildContext context) {
-    bool isGameStarted = gameStatus == GameStatus.playing;
-    final label = isGameStarted ? 'кешаут' : 'налаштувати';
+    final bool isGameActive = gameStatus == GameStatus.active;
+
+    final String label = isGameActive ? 'кешаут' : 'налаштувати';
     final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -33,9 +38,13 @@ class GameButtonAct extends StatelessWidget {
               child: Text(label.toUpperCase()),
             ),
           ),
+
           const SizedBox(height: 8),
-          if (isGameStarted)
-            Text('Наступний множник: x1.47', style: theme.textTheme.bodySmall),
+          if (isGameActive)
+            Text(
+              'Наступний множник: $nextCof',
+              style: theme.textTheme.bodySmall,
+            ),
         ],
       ),
     );
