@@ -291,6 +291,14 @@ class UserRepository {
 
       return Result.success(historyItems);
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      }
       if (e.type == DioExceptionType.connectionError) {
         return Result.failure(
           ApiError(
