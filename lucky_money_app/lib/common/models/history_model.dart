@@ -1,6 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 enum HistoryType { deposit, bet, payout }
+
+HistoryType historyTypeFrom(String value) {
+  switch (value) {
+    case "GameCashout":
+      return HistoryType.payout;
+    case "GameBet":
+      return HistoryType.bet;
+    case "Replenishment":
+      return HistoryType.deposit;
+    default:
+      return HistoryType.bet;
+  }
+}
 
 extension HistoryTypeX on HistoryType {
   String get title {
@@ -39,15 +53,29 @@ extension HistoryTypeX on HistoryType {
 }
 
 class HistoryItem {
-  final HistoryType type;
+  final String id;
+  final HistoryType operationType;
   final DateTime date;
   final double amount;
   final double? coefficient;
 
   const HistoryItem({
-    required this.type,
+    required this.id,
+    required this.operationType,
     required this.date,
     required this.amount,
     this.coefficient,
   });
+
+  factory HistoryItem.fromJson(Map<String, dynamic> json) {
+    return HistoryItem(
+      id: json['id'],
+      operationType: historyTypeFrom(json['operationType']),
+      date: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] * 1000),
+      amount: (json["amount"] as num).toDouble(),
+    );
+  }
+  String get formattedDate {
+    return DateFormat('HH:mm dd.MM.yyyy').format(date);
+  }
 }
