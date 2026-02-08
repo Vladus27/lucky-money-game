@@ -39,7 +39,12 @@ class GameRepository {
       return Result.success('Гра успішно почалась');
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
       }
       return Result.failure(
         ApiError(
@@ -74,7 +79,12 @@ class GameRepository {
       return Result.success(revealBomb);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
       }
       return Result.failure(
         ApiError(
@@ -113,7 +123,12 @@ class GameRepository {
       return Result.success(cashoutData);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
       }
       if (e.response?.statusCode == 404) {
         return Result.failure(
@@ -177,7 +192,12 @@ class GameRepository {
       return Result.success(currentGameData);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        return Result.failure(ApiError(message: 'Ви не авторизовані'));
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
       }
       if (e.response?.statusCode == 404) {
         return Result.failure(ApiError(message: 'Поточної гри не знайдено'));

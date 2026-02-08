@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:lucky_money_app/common/models/api_error.dart';
 import 'package:lucky_money_app/common/models/deposit_model.dart';
 import 'package:lucky_money_app/common/models/environment.dart';
+import 'package:lucky_money_app/common/models/history_model.dart';
 import 'package:lucky_money_app/common/models/user.dart';
 import 'package:lucky_money_app/services/secure_storage_service.dart';
 
@@ -97,9 +98,18 @@ class UserRepository {
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        storage.deleteToken();
+        return Result.failure(
+          ApiError(
+            message: 'Помилка сервера ${e.response?.statusMessage}',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      }
       return Result.failure(
         ApiError(
-          message: 'Помилка сервера',
+          message: 'Помилка сервера ${e.message}',
           statusCode: e.response?.statusCode,
         ),
       );
@@ -130,6 +140,14 @@ class UserRepository {
         );
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      }
       return Result.failure(
         ApiError(
           message: 'Помилка сервера',
@@ -172,6 +190,14 @@ class UserRepository {
 
       return Result.success('Адресу гаманця успішно встановлено');
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      }
       return Result.failure(
         ApiError(
           message: 'Помилка сервера',
@@ -220,6 +246,14 @@ class UserRepository {
       );
       return Result.success(Deposit.fromJson(response.data));
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.failure(
+          ApiError(
+            message: 'Ви не авторизовані',
+            statusCode: e.response?.statusCode,
+          ),
+        );
+      }
       return Result.failure(
         ApiError(
           message: 'Помилка сервера',
