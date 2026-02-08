@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:lucky_money_app/common/models/history_model.dart';
+import 'package:lucky_money_app/common/widgets/error_state.dart';
 import 'package:lucky_money_app/features/history/widgets/history_empty_state.dart';
 import 'package:lucky_money_app/features/history/widgets/history_tile.dart';
 import 'package:lucky_money_app/features/history/widgets/history_unauthenticated_state.dart';
-import 'package:lucky_money_app/services/secure_storage_service.dart';
+import 'package:lucky_money_app/providers/user_provider.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final storage = SecureStorageService();
-    return FutureBuilder<String?>(
-      future: storage.getToken(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncHistory = ref.watch(getHistoryOperationProvider);
+    List<HistoryItem> history = [];
 
-        final isAuthenticated = snapshot.data != null;
-
-        if (!isAuthenticated) {
+    return asyncHistory.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => HistoryUnauthenticatedState(
+        onLoginPressed: () {
+          Navigator.pushNamed(context, '/auth-login');
+        },
+        onRegisterPressed: () {
+          Navigator.pushNamed(context, '/auth-register');
+        },
+      ),
+      data: (result) {
+        if (!result.isSuccess) {
+          if (result.error?.statusCode == 408) {
+            return ErrorState(
+              message: result.error!.message,
+              statusCode: result.error?.statusCode,
+            );
+          }
           return HistoryUnauthenticatedState(
             onLoginPressed: () {
               Navigator.pushNamed(context, '/auth-login');
@@ -30,26 +43,7 @@ class HistoryScreen extends StatelessWidget {
             },
           );
         }
-
-        final history = <HistoryItem>[
-          HistoryItem(
-            type: HistoryType.deposit,
-            date: DateTime.now().subtract(const Duration(days: 1)),
-            amount: 500,
-          ),
-          HistoryItem(
-            type: HistoryType.bet,
-            date: DateTime.now().subtract(const Duration(hours: 3)),
-            amount: -100,
-          ),
-          HistoryItem(
-            type: HistoryType.payout,
-            date: DateTime.now(),
-            amount: 250,
-            coefficient: 2.5,
-          ),
-        ]; // тут буде API
-
+        history = result.data!;
         if (history.isEmpty) {
           return HistoryEmptyState(
             onDepositPressed: () {
@@ -57,7 +51,6 @@ class HistoryScreen extends StatelessWidget {
             },
           );
         }
-
         return ListView.builder(
           itemCount: history.length,
           itemBuilder: (context, index) {
