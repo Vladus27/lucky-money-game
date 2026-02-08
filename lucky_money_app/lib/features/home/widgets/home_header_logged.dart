@@ -106,6 +106,7 @@ class HomeHeaderLogged extends ConsumerWidget {
                           final store = SecureStorageService();
                           await store.deleteToken();
                           ref.invalidate(userProvider);
+                          ref.invalidate(getHistoryOperationProvider);
                         },
                         icon: const Icon(Icons.logout),
                       ),

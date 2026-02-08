@@ -112,6 +112,7 @@ class _AuthFormState extends ConsumerState<AuthForm> {
     } else {
       error = await user.registerUser(username: username, password: password);
     }
+    ref.invalidate(getHistoryOperationProvider);
 
     setState(() {
       _isLoading = false;

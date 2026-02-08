@@ -62,6 +62,7 @@ class GameNotifier extends AsyncNotifier<GameState> {
 
     // Оновлюємо баланс після старту гри
     ref.invalidate(balanceProvider);
+    ref.invalidate(getHistoryOperationProvider);
 
     // Завантажуємо нову гру
     await refresh();
@@ -137,6 +138,7 @@ class GameNotifier extends AsyncNotifier<GameState> {
 
     // Оновлюємо баланс
     ref.invalidate(balanceProvider);
+    ref.invalidate(getHistoryOperationProvider);
 
     // Оновлюємо стан гри (тепер гри немає)
     state = const AsyncData(GameState(game: null));

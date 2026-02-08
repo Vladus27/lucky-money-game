@@ -17,6 +17,7 @@ class WalletScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           ref.invalidate(balanceProvider);
+          ref.invalidate(getHistoryOperationProvider);
         },
         child: const Icon(Icons.refresh_outlined),
       ),
