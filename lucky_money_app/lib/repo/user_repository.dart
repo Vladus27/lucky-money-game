@@ -262,4 +262,49 @@ class UserRepository {
       );
     }
   }
+
+  Future<Result<List<HistoryItem>>> getHistory() async {
+    try {
+      final token = await storage.getToken();
+      if (token == null) {
+        return Result.failure(
+          ApiError(message: 'Ти не залогінений', statusCode: 401),
+        );
+      }
+      final response = await _dio.get(
+        "$_basicUrl/api/wallet/operations",
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      if (response.data["isOk"] == false) {
+        return Result.failure(ApiError(message: 'сталась халепа'));
+      }
+      final data = response.data as Map<String, dynamic>;
+      final value = data['value'] as Map<String, dynamic>;
+      final items = value['items'] as List;
+      final historyItems = items
+          .map<HistoryItem>((e) {
+            return HistoryItem.fromJson(e as Map<String, dynamic>);
+          })
+          .toList()
+          .reversed
+          .toList();
+
+      return Result.success(historyItems);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        return Result.failure(
+          ApiError(
+            message: "Помилка з'єднання: не виявлено підключення до інтернету",
+            statusCode: 408,
+          ),
+        );
+      }
+      return Result.failure(
+        ApiError(
+          message: 'Помилка сервера',
+          statusCode: e.response?.statusCode,
+        ),
+      );
+    }
+  }
 }
