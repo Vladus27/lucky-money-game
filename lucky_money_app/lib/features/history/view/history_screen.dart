@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lucky_money_app/common/models/history_model.dart';
 import 'package:lucky_money_app/common/widgets/error_state.dart';
+import 'package:lucky_money_app/features/history/widgets/history_adaptive_view.dart';
 import 'package:lucky_money_app/features/history/widgets/history_empty_state.dart';
 import 'package:lucky_money_app/features/history/widgets/history_tile.dart';
 import 'package:lucky_money_app/features/history/widgets/history_unauthenticated_state.dart';
@@ -29,26 +30,32 @@ class HistoryScreen extends ConsumerWidget {
       data: (result) {
         if (!result.isSuccess) {
           if (result.error?.statusCode == 408) {
-            return ErrorState(
-              message: result.error!.message,
-              statusCode: result.error?.statusCode,
+            return HistoryAdaptiveView(
+              child: ErrorState(
+                message: result.error!.message,
+                statusCode: result.error?.statusCode,
+              ),
             );
           }
-          return HistoryUnauthenticatedState(
-            onLoginPressed: () {
-              Navigator.pushNamed(context, '/auth-login');
-            },
-            onRegisterPressed: () {
-              Navigator.pushNamed(context, '/auth-register');
-            },
+          return HistoryAdaptiveView(
+            child: HistoryUnauthenticatedState(
+              onLoginPressed: () {
+                Navigator.pushNamed(context, '/auth-login');
+              },
+              onRegisterPressed: () {
+                Navigator.pushNamed(context, '/auth-register');
+              },
+            ),
           );
         }
         history = result.data!;
         if (history.isEmpty) {
-          return HistoryEmptyState(
-            onDepositPressed: () {
-              Navigator.pushNamed(context, '/wallet');
-            },
+          return HistoryAdaptiveView(
+            child: HistoryEmptyState(
+              onDepositPressed: () {
+                Navigator.pushNamed(context, '/wallet');
+              },
+            ),
           );
         }
         return ListView.builder(
