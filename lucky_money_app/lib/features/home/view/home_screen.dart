@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucky_money_app/common/models/screen_type.dart';
 import 'package:lucky_money_app/features/history/view/history_screen.dart';
+import 'package:lucky_money_app/features/home/widgets/home_adaptive_navigation.dart';
 
 import 'package:lucky_money_app/features/home/widgets/home_header.dart';
 import 'package:lucky_money_app/features/home/widgets/home_bottom_nav_widget.dart';
@@ -32,6 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final index = ref.watch(bottomNavProvider);
     final indexNotifier = ref.read(bottomNavProvider.notifier);
     void setPage(int i) {
       indexNotifier.setIndex(i);
@@ -42,20 +45,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
 
+    bool isMobile = ScreenType.isMobile(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const HomeHeader(),
       floatingActionButton: const HomeFabWidget(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: isMobile
+          ? FloatingActionButtonLocation.centerDocked
+          : null,
 
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: indexNotifier.setIndex,
-
-        children: const [HistoryScreen(), HomeContent()],
+      body: HomeAdaptiveNavigation(
+        isMobile: isMobile,
+        index: index,
+        onSelect: setPage,
+        child: PageView(
+          controller: _pageController,
+          onPageChanged: indexNotifier.setIndex,
+          children: const [HistoryScreen(), HomeContent()],
+        ),
       ),
-
-      bottomNavigationBar: HomeBottomNavWidget(setIndexPage: setPage),
+      bottomNavigationBar: ScreenType.isMobile(context)
+          ? HomeBottomNavWidget(setIndexPage: setPage)
+          : null,
     );
   }
 }
