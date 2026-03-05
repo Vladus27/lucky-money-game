@@ -38,26 +38,29 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
       appBar: AuthHeader(appBarTitle: copy.appBarTitle),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 24),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(copy.label, style: theme.textTheme.titleLarge),
-            const SizedBox(height: 48),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: AuthCard(
-                mode: _mode,
-                usernameLabel: copy.username,
-                passwordLabel: copy.password,
-                buttonLabel: copy.buttonLabel,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(copy.label, style: theme.textTheme.titleLarge),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: AuthCard(
+                  mode: _mode,
+                  usernameLabel: copy.username,
+                  passwordLabel: copy.password,
+                  buttonLabel: copy.buttonLabel,
+                ),
               ),
-            ),
-            AuthFooter(
-              question: copy.question,
-              questionButton: copy.questionButton,
-              toogleMode: _toggleMode,
-            ),
-          ],
+              AuthFooter(
+                question: copy.question,
+                questionButton: copy.questionButton,
+                toogleMode: _toggleMode,
+              ),
+            ],
+          ),
         ),
       ),
     );

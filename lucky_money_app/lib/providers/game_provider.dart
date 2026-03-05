@@ -72,7 +72,11 @@ class GameNotifier extends AsyncNotifier<GameState> {
   // Метод для оновлення поточної гри
   Future<void> refresh() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => _loadCurrentGame());
+    final currentSafePositions = state.value?.safeRevealedPositions ?? {};
+    final gameResult = await _loadCurrentGame();
+    state = AsyncData(
+      GameState.loaded(gameResult.game, safePositions: currentSafePositions),
+    );
   }
 
   // Метод для відкриття позиції
@@ -100,7 +104,8 @@ class GameNotifier extends AsyncNotifier<GameState> {
           currentPayoutAmount: 0,
           minesCount: currentState.game!.minesCount,
           status: GameStatus.lost,
-          revealedPositions: revealBomb.minePositions, // Позиції бомб
+          // Всі позиції бомб як вони повернулись + поточна позиція
+          revealedPositions: {...revealBomb.minePositions, positionId},
         );
         // Зберігаємо безпечні клітинки які відкрили до програшу
         state = AsyncData(
@@ -140,8 +145,8 @@ class GameNotifier extends AsyncNotifier<GameState> {
     ref.invalidate(balanceProvider);
     ref.invalidate(getHistoryOperationProvider);
 
-    // Оновлюємо стан гри (тепер гри немає)
-    state = const AsyncData(GameState(game: null));
+    // Очищуємо стан гри (тепер гри немає)
+    state = const AsyncData(GameState(game: null, safeRevealedPositions: {}));
     return true;
   }
 

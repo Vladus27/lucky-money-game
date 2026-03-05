@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucky_money_app/common/models/authentication_copy.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_input.dart';
 import 'package:lucky_money_app/features/authentication/widgets/password_requirements.dart';
@@ -83,6 +84,7 @@ class _AuthFormState extends ConsumerState<AuthForm> {
           widget.mode == AuthMode.register
               ? PasswordRequirements(password: inputPassword)
               : const SizedBox.shrink(),
+          const SizedBox(height: 16),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -113,6 +115,7 @@ class _AuthFormState extends ConsumerState<AuthForm> {
       error = await user.registerUser(username: username, password: password);
     }
     ref.invalidate(getHistoryOperationProvider);
+    ref.invalidate(balanceProvider);
 
     setState(() {
       _isLoading = false;
@@ -129,7 +132,7 @@ class _AuthFormState extends ConsumerState<AuthForm> {
         return;
       }
       ref.invalidate(userProvider);
-      Navigator.pop(context);
+      context.pop();
     }
     debugPrint('Username: $username, password: $password');
   }

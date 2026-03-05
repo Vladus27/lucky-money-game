@@ -152,6 +152,7 @@ class _GameGridState extends ConsumerState<GameGrid> {
 
   Widget _buildGrid(ThemeData theme, GameState? gameState, GameStatus status) {
     return Container(
+      constraints: const BoxConstraints(maxWidth: 600),
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),

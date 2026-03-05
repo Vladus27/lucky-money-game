@@ -207,7 +207,7 @@ class UserRepository {
     }
   }
 
-  Future<Result<String?>> getWalletAddressConnect() async {
+  Future<Result<String>> getWalletAddressConnect() async {
     try {
       final token = await storage.getToken();
       if (token == null) {
@@ -220,7 +220,7 @@ class UserRepository {
       if (response.data["isOk"] == true) {
         final responseData = response.data["value"];
 
-        return Result.success(responseData);
+        return Result.success(responseData ?? '');
       } else {
         return Result.failure(
           ApiError(
