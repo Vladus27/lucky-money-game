@@ -7,6 +7,10 @@ class LuckyMoneyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'LuckyMoney', theme: casinoTheme, routes: routes);
+    return MaterialApp.router(
+      title: 'LuckyMoney',
+      theme: casinoTheme,
+      routerConfig: appRouter,
+    );
   }
 }

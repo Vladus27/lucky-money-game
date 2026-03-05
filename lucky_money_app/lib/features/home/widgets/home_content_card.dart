@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucky_money_app/common/constant/home_strings.dart';
 import 'package:lucky_money_app/common/constant/image_constants.dart';
 import 'package:lucky_money_app/common/widgets/box_shadow.dart';
@@ -36,7 +37,7 @@ class HomeContentCard extends StatelessWidget {
                   ),
                   onPressed: isAuthenticated
                       ? () {
-                          Navigator.pushNamed(context, '/my-gane');
+                          context.push('/my-gane');
                         }
                       : null,
                   child: const Text(homeLabelBtn),

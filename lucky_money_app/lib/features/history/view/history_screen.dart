@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:lucky_money_app/common/models/history_model.dart';
 import 'package:lucky_money_app/common/widgets/error_state.dart';
@@ -21,10 +22,10 @@ class HistoryScreen extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (_, __) => HistoryUnauthenticatedState(
         onLoginPressed: () {
-          Navigator.pushNamed(context, '/auth-login');
+          context.go('/auth-login');
         },
         onRegisterPressed: () {
-          Navigator.pushNamed(context, '/auth-register');
+          context.go('/auth-register');
         },
       ),
       data: (result) {
@@ -40,10 +41,10 @@ class HistoryScreen extends ConsumerWidget {
           return HistoryAdaptiveView(
             child: HistoryUnauthenticatedState(
               onLoginPressed: () {
-                Navigator.pushNamed(context, '/auth-login');
+                context.go('/auth-login');
               },
               onRegisterPressed: () {
-                Navigator.pushNamed(context, '/auth-register');
+                context.go('/auth-register');
               },
             ),
           );
@@ -53,7 +54,7 @@ class HistoryScreen extends ConsumerWidget {
           return HistoryAdaptiveView(
             child: HistoryEmptyState(
               onDepositPressed: () {
-                Navigator.pushNamed(context, '/wallet');
+                context.push('/wallet');
               },
             ),
           );

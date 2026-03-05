@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeHeaderGuest extends StatelessWidget {
   const HomeHeaderGuest({super.key});
@@ -9,14 +10,14 @@ class HomeHeaderGuest extends StatelessWidget {
       children: [
         OutlinedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/auth-login');
+            context.go('/auth-login');
           },
           child: const Text('Увійти'),
         ),
         const SizedBox(width: 8),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/auth-register');
+            context.go('/auth-register');
           },
           child: const Text('Реєстрація'),
         ),

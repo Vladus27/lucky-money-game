@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lucky_money_app/common/models/screen_type.dart';
 import 'package:lucky_money_app/providers/user_provider.dart';
 
@@ -16,10 +17,10 @@ class HomeFabWidget extends ConsumerWidget {
         shape: const CircleBorder(),
         onPressed: isAuthenticated
             ? () {
-                Navigator.pushNamed(context, '/wallet');
+                context.push('/wallet');
               }
             : null,
-        child: const Icon(Icons.wallet_rounded),
+        child: Icon(isAuthenticated ? Icons.wallet_rounded : Icons.lock),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:lucky_money_app/features/game/widgets/game_bet_input.dart';
 import 'package:lucky_money_app/features/game/widgets/game_button_start.dart';
@@ -100,7 +101,7 @@ class _GameSettingInputsState extends ConsumerState<GameSettingInputs> {
 
       if (success) {
         // Успішний старт - закриваємо bottom sheet
-        Navigator.pop(context);
+        context.pop();
 
         // Показуємо успішне повідомлення
         ScaffoldMessenger.of(context).showSnackBar(
