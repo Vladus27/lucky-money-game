@@ -170,10 +170,7 @@ class UserRepository {
         options: Options(headers: {'Authorization': 'Bearer $token'}),
         queryParameters: {'walletAddress': address},
       );
-      if (response.data["isOk"] == true) {
-        return Result.success('Адресу гаманця успішно встановлено');
-      } else {
-        return Result.failure(ApiError(message: 'не вдалось задати гаманець'));
+
       if (response.data["statusCode"] == 20001) {
         return Result.failure(
           ApiError(message: 'Данний адрес вже встановлений'),
